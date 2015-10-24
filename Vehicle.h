@@ -10,29 +10,34 @@
 using namespace std;
 
 class Vehicle {
-    string manufacturer, model, licensePlate;
+    string manufacturer, model, licensePlate, color;
 public:
-    Vehicle(string manufacturer, string model, string licensePlate); //add relevant parameters
+    Vehicle(string manufacturer, string model, string licensePlate, string color); //add relevant parameters
+    virtual bool setColor(string color); //bool needed?
 };
 
 class Automobile : Vehicle {
+    int numDoors;
 public:
-    Automobile(string manufacturer, string model, string licensePlate); //add relevant parameters
+    Automobile(string manufacturer, string model, string licensePlate, string color, int numDoors); //add relevant parameters
 };
 
 class Motorcycle : Vehicle {
+    string type;
 public:
-    Motorcycle(string manufacturer, string model, string licensePlate); //add relevant parameters
+    Motorcycle(string manufacturer, string model, string licensePlate, string color, string type); //add relevant parameters
 };
 
 class Truck : Vehicle {
+    int maxWeight;
 public:
-    Truck(string manufacturer, string model, string licensePlate); //add relevant parameters
+    Truck(string manufacturer, string model, string licensePlate, string color, int maxWeight); //add relevant parameters
 };
 
 class Bus : Vehicle {
+    int numSittingSpots, numStandingSpots;
 public:
-    Bus(string manufacturer, string model, string licensePlate); //add relevant parameters
+    Bus(string manufacturer, string model, string licensePlate, string color, int numSitttingSpots, int numStandingSpots); //add relevant parameters
 };
 
 #endif //AEDA_PROJECT_VEHICLE_H
