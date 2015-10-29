@@ -17,6 +17,7 @@ public:
     virtual bool setColor(string color); //bool needed?
     virtual int classIdentifier() {return 0;};
     virtual void saveObjectInfo(ostream& out);
+    const string& getLicensePlate() const;
 };
 
 class Automobile : Vehicle {

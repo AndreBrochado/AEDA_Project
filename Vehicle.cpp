@@ -83,3 +83,7 @@ Truck::Truck(istream &in) : Vehicle(in) {
 Bus::Bus(istream &in) : Vehicle(in) {
     in >> this->numSittingSpots >> this->numStandingSpots;
 }
+
+const string &Vehicle::getLicensePlate() const {
+        return licensePlate;
+}
