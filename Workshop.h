@@ -12,17 +12,15 @@
 
 using namespace std;
 
-class Workshop {
+class Client {
+    string name;
+    int clientID;
     vector<Vehicle *> vehicles;
-    vector<Employee> employees;
-    vector<Client> clients;
 public:
-    Workshop(){};
-    bool isClient(Client client1);
-    bool isEmployee(Employee employee1);
-    bool addClient(Client client); //bool needed ?
-    bool addEmployee(Employee employee); //bool needed ?
-    bool addVehicle(Vehicle* vehicle); //bool needed ?
+    Client(string name);
+    bool addVehicle(Vehicle *v); //bool needed?
+    int getClientID() const;
+    void setClientID(int clientID);
 };
 
 class Employee {
@@ -36,16 +34,20 @@ public:
     void setEmployeeID(int employeeID);
 };
 
-class Client {
-    string name;
-    int clientID;
+class Workshop {
     vector<Vehicle *> vehicles;
+    vector<Employee> employees;
+    vector<Client> clients;
 public:
-    Client(string name);
-    bool addVehicle(Vehicle *v); //bool needed?
-    int getClientID() const;
-    void setClientID(int clientID);
+    Workshop(){};
+    bool isClient(Client client1);
+    bool isEmployee(Employee employee1);
+    bool addClient(Client client); //bool needed ?
+    bool addEmployee(Employee employee); //bool needed ?
+    bool addVehicle(Vehicle* vehicle); //bool needed ?
 };
+
+
 
 class Service {
 
