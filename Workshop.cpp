@@ -3,7 +3,7 @@
 //
 
 #include "Workshop.h"
-#include "Utilities.h.h"
+#include "Utilities.h"
 
 bool Workshop::addClient(Client client) {
     if(isClient(client))
@@ -55,3 +55,9 @@ void Employee::setEmployeeID(int employeeID) {
     this->employeeID = employeeID;
 }
 
+bool Workshop::addVehicle(Vehicle *vehicle) {
+    if(exists(vehicle, vehicles))
+        return false;
+    vehicles.push_back(vehicle);
+    return true;
+}

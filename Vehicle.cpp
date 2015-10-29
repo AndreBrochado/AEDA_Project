@@ -36,3 +36,36 @@ Bus::Bus(string manufacturer, string model, string licensePlate, string color, i
 bool Vehicle::setColor(string color) {
     this->color = color;
 }
+
+void Vehicle::saveObjectInfo(ostream &out) {
+    out << this->classIdentifier() << endl
+    << this->manufacturer << " " << this->model << endl
+    << this->licensePlate << endl << this->color;
+}
+
+
+void Automobile::saveObjectInfo(ostream &out) {
+    Vehicle::saveObjectInfo(out);
+    out << endl << this->numDoors;
+}
+
+void Motorcycle::saveObjectInfo(ostream &out) {
+    Vehicle::saveObjectInfo(out);
+    out << endl << this->type;
+}
+
+void Truck::saveObjectInfo(ostream &out) {
+    Vehicle::saveObjectInfo(out);
+    out << endl << this->maxWeight;
+}
+
+void Bus::saveObjectInfo(ostream &out) {
+    Vehicle::saveObjectInfo(out);
+    out << endl << this->numSittingSpots << " " << this->numStandingSpots;
+}
+
+Vehicle::Vehicle(istream& in) {
+    getline(in, manufacturer, ' ');
+    getline(in, model);
+    //TODO continue
+}
