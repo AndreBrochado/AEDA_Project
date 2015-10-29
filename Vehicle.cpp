@@ -65,7 +65,21 @@ void Bus::saveObjectInfo(ostream &out) {
 }
 
 Vehicle::Vehicle(istream& in) {
-    getline(in, manufacturer, ' ');
-    getline(in, model);
-    //TODO continue
+    in >> this->manufacturer >> this->model >> this->licensePlate >> this->color;
+}
+
+Automobile::Automobile(istream &in) : Vehicle(in) {
+    in >> this->numDoors;
+}
+
+Motorcycle::Motorcycle(istream &in) : Vehicle(in) {
+    in >> this->type;
+}
+
+Truck::Truck(istream &in) : Vehicle(in) {
+    in >> this->maxWeight;
+}
+
+Bus::Bus(istream &in) : Vehicle(in) {
+    in >> this->numSittingSpots >> this->numStandingSpots;
 }

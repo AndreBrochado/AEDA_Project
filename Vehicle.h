@@ -49,7 +49,7 @@ public:
 class Bus : Vehicle {
     int numSittingSpots, numStandingSpots;
 public:
-    Bus(string manufacturer, string model, string licensePlate, string color, int numSitttingSpots, int numStandingSpots); //add relevant parameters
+    Bus(string manufacturer, string model, string licensePlate, string color, int numSittingSpots, int numStandingSpots); //add relevant parameters
     Bus(istream& in);
     int classIdentifier() {return 3;};
     void saveObjectInfo(ostream& out);
