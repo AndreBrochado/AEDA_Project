@@ -29,8 +29,7 @@ int Client::getClientID() const {
     return clientID;
 }
 
-Client::Client(string name) {
-    this->name = name;
+Client::Client(string name) : Person(name) {
     this->clientID = -1;
 }
 
@@ -42,8 +41,7 @@ bool Workshop::isEmployee(Employee employee1){
     return exists(employee1, employees);
 }
 
-Employee::Employee(string name) {
-    this->name = name;
+Employee::Employee(string name) : Person(name) {
     this->employeeID = -1;
 }
 
@@ -60,4 +58,25 @@ bool Workshop::addVehicle(Vehicle *vehicle) {
         return false;
     vehicles.push_back(vehicle);
     return true;
+}
+
+Person::Person(string name) {
+    this->name = name;
+}
+
+void Person::saveObjectInfo(ostream& out) {
+    out << this->name << endl;
+    for(size_t i = 0; i < vehicles.size(); i++){
+        out << vehicles[i]->getLicensePlate() << endl;
+    }
+}
+
+void Client::saveObjectInfo(ostream &out) {
+    Person::saveObjectInfo(out);
+    out << this->clientID;
+}
+
+void Employee::saveObjectInfo(ostream &out) {
+    Person::saveObjectInfo(out);
+    out << this->employeeID;
 }

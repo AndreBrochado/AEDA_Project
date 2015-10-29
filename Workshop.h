@@ -12,7 +12,15 @@
 
 using namespace std;
 
-class Client {
+class Person {
+    string name;
+    vector<Vehicle*> vehicles;
+public:
+    Person(string name);
+    virtual void saveObjectInfo(ostream& out);
+};
+
+class Client : public Person {
     string name;
     int clientID;
     vector<Vehicle *> vehicles;
@@ -21,9 +29,10 @@ public:
     bool addVehicle(Vehicle *v); //bool needed?
     int getClientID() const;
     void setClientID(int clientID);
+    void saveObjectInfo(ostream& out);
 };
 
-class Employee {
+class Employee : public Person {
     string name;
     int employeeID;
     vector<Vehicle *> vehicles;
@@ -32,6 +41,7 @@ public:
     bool assignVehicle(Vehicle *v); //bool needed ?
     int getEmployeeID() const;
     void setEmployeeID(int employeeID);
+    void saveObjectInfo(ostream& out);
 };
 
 class Workshop {
