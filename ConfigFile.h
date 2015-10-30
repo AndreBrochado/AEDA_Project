@@ -5,7 +5,7 @@
 #ifndef AEDA_PROJECT_CONFIGFILE_H
 #define AEDA_PROJECT_CONFIGFILE_H
 
-#include "Workshop.h"
+#include "AutoRepairShop.h"
 
 
 class ConfigFile {

@@ -44,12 +44,12 @@ public:
     void saveObjectInfo(ostream& out);
 };
 
-class Workshop {
+class AutoRepairShop {
     vector<Vehicle *> vehicles;
     vector<Employee> employees;
     vector<Client> clients;
 public:
-    Workshop(){};
+    AutoRepairShop(){};
     bool isClient(Client client1);
     bool isEmployee(Employee employee1);
     bool addClient(Client client); //bool needed ?

@@ -2,10 +2,10 @@
 // Created by Andre on 17/10/2015.
 //
 
-#include "Workshop.h"
+#include "AutoRepairShop.h"
 #include "Utilities.h"
 
-bool Workshop::addClient(Client client) {
+bool AutoRepairShop::addClient(Client client) {
     if(isClient(client))
         return false;
     clients.push_back(client);
@@ -13,7 +13,7 @@ bool Workshop::addClient(Client client) {
     return true;
 }
 
-bool Workshop::addEmployee(Employee employee) {
+bool AutoRepairShop::addEmployee(Employee employee) {
     if(isEmployee(employee))
         return false;
     employees.push_back(employee);
@@ -33,11 +33,11 @@ Client::Client(string name) : Person(name) {
     this->clientID = -1;
 }
 
-bool Workshop::isClient(Client client1) {
+bool AutoRepairShop::isClient(Client client1) {
     return exists(client1, clients);
 }
 
-bool Workshop::isEmployee(Employee employee1){
+bool AutoRepairShop::isEmployee(Employee employee1){
     return exists(employee1, employees);
 }
 
@@ -53,7 +53,7 @@ void Employee::setEmployeeID(int employeeID) {
     this->employeeID = employeeID;
 }
 
-bool Workshop::addVehicle(Vehicle *vehicle) {
+bool AutoRepairShop::addVehicle(Vehicle *vehicle) {
     if(exists(vehicle, vehicles))
         return false;
     vehicles.push_back(vehicle);
