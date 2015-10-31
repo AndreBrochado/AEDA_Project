@@ -12,12 +12,20 @@
 using namespace std;
 
 template<class T>
-bool exists(T obj, vector<T> v){
+bool exists(T obj, const vector<T>& v){
     for(size_t i = 0; i < v.size(); i++){
         if(obj == v[i])
             return true;
     }
     return false;
+}
+
+template<class T>
+bool addsIfNotExist(T obj, vector<T>& v){
+    if(exists(obj, v))
+        return false;
+    v.push_back(obj);
+    return true;
 }
 
 bool operator==(const Client &c1,const Client &c2){
@@ -26,6 +34,10 @@ bool operator==(const Client &c1,const Client &c2){
 
 bool operator==(const Employee &e1, const Employee &e2){
     return e1.getEmployeeID() == e2.getEmployeeID();
+}
+
+bool operator==(const Vehicle &v1, const Vehicle &v2){
+    return v1.getLicensePlate() == v2.getLicensePlate();
 }
 
 #endif //AEDA_PROJECT_UTILITIES_H
