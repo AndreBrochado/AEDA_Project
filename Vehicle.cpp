@@ -35,6 +35,7 @@ Bus::Bus(string manufacturer, string model, string licensePlate, string color, i
 
 bool Vehicle::setColor(string color) {
     this->color = color;
+    return true;
 }
 
 void Vehicle::saveObjectInfo(ostream &out) {
