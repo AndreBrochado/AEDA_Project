@@ -6,7 +6,7 @@
 #include "Utilities.h"
 
 bool AutoRepairShop::addClient(Client client) {
-    if(isClient(client))
+    if(isClient(client)) //TODO IMPLEMENT WITH addsIfNotExist()
         return false;
     clients.push_back(client);
     clients[clients.size()-1].setClientID(clients.size()-1);
@@ -14,7 +14,7 @@ bool AutoRepairShop::addClient(Client client) {
 }
 
 bool AutoRepairShop::addEmployee(Employee employee) {
-    if(isEmployee(employee))
+    if(isEmployee(employee)) //TODO IMPLEMENT WITH addsIfNotExist()
         return false;
     employees.push_back(employee);
     employees[employees.size()-1].setEmployeeID(employees.size()-1);
@@ -54,10 +54,7 @@ void Employee::setEmployeeID(int employeeID) {
 }
 
 bool AutoRepairShop::addVehicle(Vehicle *vehicle) {
-    if(exists(vehicle, vehicles))
-        return false;
-    vehicles.push_back(vehicle);
-    return true;
+    return addsIfNotExist(vehicle, this->vehicles);
 }
 
 Person::Person(string name) {
@@ -79,4 +76,41 @@ void Client::saveObjectInfo(ostream &out) {
 void Employee::saveObjectInfo(ostream &out) {
     Person::saveObjectInfo(out);
     out << this->employeeID;
+}
+
+Person::Person(istream &in, vector<string>& licensePlates) {
+    in >> this->name;
+    string testString = "-";
+    in >> testString;
+    while(testString.find('-') != string::npos){
+        if(testString == "-"){
+            exception e; //TODO specify
+            throw(e);
+        }
+        licensePlates.push_back(testString);
+    }
+}
+
+Client::Client(istream &in, vector<string>& licensePlates) : Person(in, licensePlates) {
+    in >> clientID;
+}
+
+Employee::Employee(istream &in, vector<string> &licensePlates) : Person(in, licensePlates) {
+    in >> employeeID;
+}
+
+bool Client::addVehicle(Vehicle *vehicle) {
+    return addsIfNotExist(vehicle, this->vehicles);
+}
+
+bool Employee::assignVehicle(Vehicle *vehicle) {
+    return addsIfNotExist(vehicle, this->vehicles);
+}
+
+AutoRepairShop::AutoRepairShop(string name) {
+    this->name = name;
+}
+
+const string &AutoRepairShop::getName() const {
+    return this->name;
 }

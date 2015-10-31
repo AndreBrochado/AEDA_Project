@@ -17,6 +17,7 @@ class Person {
     vector<Vehicle*> vehicles;
 public:
     Person(string name);
+    Person(istream& in, vector<string>& licensePlates);
     virtual void saveObjectInfo(ostream& out);
 };
 
@@ -26,7 +27,8 @@ class Client : public Person {
     vector<Vehicle *> vehicles;
 public:
     Client(string name);
-    bool addVehicle(Vehicle *v); //bool needed?
+    Client(istream& in, vector<string>& licensePlates);
+    bool addVehicle(Vehicle* vehicle); //bool needed?
     int getClientID() const;
     void setClientID(int clientID);
     void saveObjectInfo(ostream& out);
@@ -38,23 +40,26 @@ class Employee : public Person {
     vector<Vehicle *> vehicles;
 public:
     Employee(string name);
-    bool assignVehicle(Vehicle *v); //bool needed ?
+    Employee(istream& in, vector<string>& licensePlates);
+    bool assignVehicle(Vehicle* vehicle); //bool needed ?
     int getEmployeeID() const;
     void setEmployeeID(int employeeID);
     void saveObjectInfo(ostream& out);
 };
 
 class AutoRepairShop {
+    string name;
     vector<Vehicle *> vehicles;
     vector<Employee> employees;
     vector<Client> clients;
 public:
-    AutoRepairShop(){};
+    AutoRepairShop(string name);
     bool isClient(Client client1);
     bool isEmployee(Employee employee1);
     bool addClient(Client client); //bool needed ?
     bool addEmployee(Employee employee); //bool needed ?
     bool addVehicle(Vehicle* vehicle); //bool needed ?
+    const string& getName() const;
 };
 
 
