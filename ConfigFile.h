@@ -9,15 +9,25 @@
 
 
 class ConfigFile {
-
+    const string filename;
+public:
+    ConfigFile(const string &filename);
 };
 
-class VehiclesFile : ConfigFile {};
+class VehiclesFile : ConfigFile {
+public:
+    VehiclesFile(const string &filename) : ConfigFile(filename) { }
+};
 
-class ClientsFile : ConfigFile {};
+class ClientsFile : ConfigFile {
+public:
+    ClientsFile(const string &filename) : ConfigFile(filename) { }
+};
 
-class EmployeesFile : ConfigFile {};
-
+class EmployeesFile : ConfigFile {
+public:
+    EmployeesFile(const string &filename) : ConfigFile(filename) { }
+};
 
 
 

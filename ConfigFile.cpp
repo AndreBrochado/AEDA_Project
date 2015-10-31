@@ -3,3 +3,5 @@
 //
 
 #include "ConfigFile.h"
+
+ConfigFile::ConfigFile(const string &filename) : filename(filename) {}
