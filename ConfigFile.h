@@ -9,24 +9,33 @@
 
 
 class ConfigFile {
-    const string filename;
+    string filename;
 public:
-    ConfigFile(const string &filename);
+    ConfigFile(string &filename);
+    void createFile(string &filename);
+    bool existsFile(string &filename);
+};
+
+class AutoRepairShopFile : ConfigFile {
+public:
+    AutoRepairShopFile(string &filename) : ConfigFile(filename) { }
+    bool saveData(AutoRepairShop &repairShop, string &thisFilename, string &vehiclesFilename, string &clientsFilename, string &employeesFileName);
 };
 
 class VehiclesFile : ConfigFile {
 public:
-    VehiclesFile(const string &filename) : ConfigFile(filename) { }
+    VehiclesFile(string &filename) : ConfigFile(filename) { }
+    bool saveData(string &thisFilename);
 };
 
 class ClientsFile : ConfigFile {
 public:
-    ClientsFile(const string &filename) : ConfigFile(filename) { }
+    ClientsFile(string &filename) : ConfigFile(filename) { }
 };
 
 class EmployeesFile : ConfigFile {
 public:
-    EmployeesFile(const string &filename) : ConfigFile(filename) { }
+    EmployeesFile(string &filename) : ConfigFile(filename) { }
 };
 
 

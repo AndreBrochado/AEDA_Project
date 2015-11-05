@@ -40,4 +40,19 @@ bool operator==(const Vehicle &v1, const Vehicle &v2){
     return v1.getLicensePlate() == v2.getLicensePlate();
 }
 
+bool readString(const string &prompt, string &returnString) {
+    string testString;
+    cout << prompt;
+    getline(cin, testString);
+    cout << endl;
+    if (cin.fail()) {
+        if (!cin.eof())
+            cin.ignore(1000, '\n');
+        cin.clear();
+        return false;
+    }
+    returnString = testString;
+    return true;
+}
+
 #endif //AEDA_PROJECT_UTILITIES_H
