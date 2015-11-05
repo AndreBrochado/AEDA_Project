@@ -29,11 +29,11 @@ bool addsIfNotExist(T obj, vector<T>& v){
 }
 
 bool operator==(const Client &c1,const Client &c2){
-    return c1.getClientID() == c2.getClientID();
+    return c1.getID() == c2.getID();
 }
 
 bool operator==(const Employee &e1, const Employee &e2){
-    return e1.getEmployeeID() == e2.getEmployeeID();
+    return e1.getID() == e2.getID();
 }
 
 bool operator==(const Vehicle &v1, const Vehicle &v2){

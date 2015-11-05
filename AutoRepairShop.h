@@ -13,37 +13,39 @@
 using namespace std;
 
 class Person {
+protected:
     string name;
     vector<Vehicle*> vehicles;
+    int id;
 public:
     Person(string name);
     Person(istream& in, vector<string>& licensePlates);
     virtual void saveObjectInfo(ostream& out);
+    Vehicle* vehicleWithLicensePlate(string licensePlate);
+
+    void setID(int id){this->id = id;};
+    int getID() const{return id;};
+    class InexistentVehicle{
+        string licensePlate;
+    public:
+        InexistentVehicle(string licensePlate) : licensePlate(licensePlate){};
+        const string& getLicensePlate(){return licensePlate;};
+    };
 };
 
 class Client : public Person {
-    string name;
-    int clientID;
-    vector<Vehicle *> vehicles;
 public:
-    Client(string name);
-    Client(istream& in, vector<string>& licensePlates);
+    Client(string name) : Person(name){};
+    Client(istream& in, vector<string>& licensePlates) : Person(in, licensePlates){};
     bool addVehicle(Vehicle* vehicle); //bool needed?
-    int getClientID() const;
-    void setClientID(int clientID);
     void saveObjectInfo(ostream& out);
 };
 
 class Employee : public Person {
-    string name;
-    int employeeID;
-    vector<Vehicle *> vehicles;
 public:
-    Employee(string name);
-    Employee(istream& in, vector<string>& licensePlates);
+    Employee(string name) : Person(name){};
+    Employee(istream& in, vector<string>& licensePlates) : Person(in, licensePlates){};
     bool assignVehicle(Vehicle* vehicle); //bool needed ?
-    int getEmployeeID() const;
-    void setEmployeeID(int employeeID);
     void saveObjectInfo(ostream& out);
 };
 
@@ -65,6 +67,7 @@ public:
 
 
 class Service {
+protected:
     string description;
     float price;
     time_t startingDate;

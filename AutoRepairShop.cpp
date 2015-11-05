@@ -2,7 +2,9 @@
 // Created by Andre on 17/10/2015.
 //
 
+
 #include <time.h>
+#include <stdlib.h>
 #include "AutoRepairShop.h"
 #include "Utilities.h"
 
@@ -10,7 +12,7 @@ bool AutoRepairShop::addClient(Client client) {
     if(isClient(client)) //TODO IMPLEMENT WITH addsIfNotExist()
         return false;
     clients.push_back(client);
-    clients[clients.size()-1].setClientID(clients.size()-1);
+    clients[clients.size()-1].setID(clients.size()-1);
     return true;
 }
 
@@ -18,20 +20,8 @@ bool AutoRepairShop::addEmployee(Employee employee) {
     if(isEmployee(employee)) //TODO IMPLEMENT WITH addsIfNotExist()
         return false;
     employees.push_back(employee);
-    employees[employees.size()-1].setEmployeeID(employees.size()-1);
+    employees[employees.size()-1].setID(employees.size()-1);
     return true;
-}
-
-void Client::setClientID(int clientID) {
-    this->clientID = clientID;
-}
-
-int Client::getClientID() const {
-    return clientID;
-}
-
-Client::Client(string name) : Person(name) {
-    this->clientID = -1;
 }
 
 bool AutoRepairShop::isClient(Client client1) {
@@ -42,24 +32,13 @@ bool AutoRepairShop::isEmployee(Employee employee1){
     return exists(employee1, employees);
 }
 
-Employee::Employee(string name) : Person(name) {
-    this->employeeID = -1;
-}
-
-int Employee::getEmployeeID() const {
-    return this->employeeID;
-}
-
-void Employee::setEmployeeID(int employeeID) {
-    this->employeeID = employeeID;
-}
-
 bool AutoRepairShop::addVehicle(Vehicle *vehicle) {
     return addsIfNotExist(vehicle, this->vehicles);
 }
 
 Person::Person(string name) {
     this->name = name;
+    this->id = -1;
 }
 
 void Person::saveObjectInfo(ostream& out) {
@@ -67,16 +46,15 @@ void Person::saveObjectInfo(ostream& out) {
     for(size_t i = 0; i < vehicles.size(); i++){
         out << vehicles[i]->getLicensePlate() << endl;
     }
+    out << this->id;
 }
 
 void Client::saveObjectInfo(ostream &out) {
     Person::saveObjectInfo(out);
-    out << this->clientID;
 }
 
 void Employee::saveObjectInfo(ostream &out) {
     Person::saveObjectInfo(out);
-    out << this->employeeID;
 }
 
 Person::Person(istream &in, vector<string>& licensePlates) {
@@ -90,14 +68,7 @@ Person::Person(istream &in, vector<string>& licensePlates) {
         }
         licensePlates.push_back(testString);
     }
-}
-
-Client::Client(istream &in, vector<string>& licensePlates) : Person(in, licensePlates) {
-    in >> clientID;
-}
-
-Employee::Employee(istream &in, vector<string> &licensePlates) : Person(in, licensePlates) {
-    in >> employeeID;
+    this->id = atoi(testString.c_str());
 }
 
 bool Client::addVehicle(Vehicle *vehicle) {
@@ -126,5 +97,12 @@ Service::Service(int day, int month, int year){
 
 NonStandard::NonStandard(int day, int month, int year, string description, float price, int duration) : Service(day, month, year) {
     this->description = description;
-    this->
+}
+
+Vehicle *Person::vehicleWithLicensePlate(string licensePlate) {
+    for(size_t i = 0; i < vehicles.size(); i++){
+        if(vehicles[i]->getLicensePlate() == licensePlate)
+            return vehicles[i];
+    }
+    throw(InexistentVehicle(licensePlate));
 }
