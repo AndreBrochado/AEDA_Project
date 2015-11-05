@@ -65,15 +65,22 @@ public:
 
 
 class Service {
-
+    string description;
+    float price;
+    time_t startingDate;
+    int duration;
+public:
+    Service(int day, int month, int year);
+    virtual float getPrice() const = 0;
 };
 
 class Standard : Service {
-
+public:
+    Standard(int day, int month, int year) : Service(day, month, year) {};
 };
 
 class NonStandard : Service {
-
+    NonStandard(int day, int month, int year, string description ,float price, int duration);
 };
 
 #endif //AEDA_PROJECT_WORKSHOP_H

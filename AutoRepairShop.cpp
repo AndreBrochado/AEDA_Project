@@ -2,6 +2,7 @@
 // Created by Andre on 17/10/2015.
 //
 
+#include <time.h>
 #include "AutoRepairShop.h"
 #include "Utilities.h"
 
@@ -113,4 +114,17 @@ AutoRepairShop::AutoRepairShop(string name) {
 
 const string &AutoRepairShop::getName() const {
     return this->name;
+}
+
+Service::Service(int day, int month, int year){
+    tm temp{0};
+    temp.tm_year = year - 1990;
+    temp.tm_mon = month - 1;
+    temp.tm_mday = day;
+    startingDate = mktime(&temp);
+}
+
+NonStandard::NonStandard(int day, int month, int year, string description, float price, int duration) : Service(day, month, year) {
+    this->description = description;
+    this->
 }
