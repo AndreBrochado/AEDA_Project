@@ -2,6 +2,7 @@
 // Created by Andre on 17/10/2015.
 //
 
+#include <stdlib.h>
 #include "Vehicle.h"
 
 // ================================= VEHICLE ================================= //
@@ -13,13 +14,30 @@ Vehicle::Vehicle(string manufacturer, string model, string licensePlate) {
 }
 
 Vehicle::Vehicle(istream& in) {
-    in >> this->manufacturer >> this->model >> this->licensePlate;
+    string testString = "";
+    int classIdentifier = 0;
+    in >> this->manufacturer >> this->model;
+    in >> testString;
+    while(testString.find("-") == string::npos){
+        classIdentifier = atoi(testString.c_str());
+        this->services.push_back(createServiceObject(classIdentifier, in));
+        in>>testString;
+    }
+    this->licensePlate = testString;
 }
 
 void Vehicle::saveObjectInfo(ostream &out) {
     out << this->classIdentifier() << endl
-    << this->manufacturer << " " << this->model << endl
-    << this->licensePlate;
+    << this->manufacturer << " " << this->model << endl;
+    for(size_t i = 0; i < services.size(); i++){
+        services[i]->saveObjectInfo(out);
+        out<< endl;
+    }
+    out << this->licensePlate;
+}
+
+bool Vehicle::addService(Service *s1) {
+    return addsIfNotExist(s1, services);
 }
 
 bool operator==(const Vehicle &v1, const Vehicle &v2){

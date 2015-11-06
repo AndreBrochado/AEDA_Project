@@ -6,16 +6,19 @@
 #define AEDA_PROJECT_VEHICLE_H
 
 #include <iostream>
+#include "Service.h"
 
 using namespace std;
 
 class Vehicle {
     string manufacturer, model, licensePlate;
+    vector<Service*> services;
 public:
     Vehicle(string manufacturer, string model, string licensePlate); //add relevant parameters
     Vehicle(istream& in);
     virtual int classIdentifier() {return 0;};
     virtual void saveObjectInfo(ostream& out);
+    bool addService(Service* s1);
     const string& getLicensePlate() const{return licensePlate;};
 };
 
