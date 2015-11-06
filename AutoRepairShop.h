@@ -63,41 +63,6 @@ public:
     const string& getName() const;
 };
 
-class Service {
-protected:
-    string description;
-    float price;
-    time_t startingDate;
-    int duration;
-public:
-    Service(Date startingDate);
-    virtual float getPrice() const = 0;
-    virtual float getDuration() const = 0;
-    virtual float getDescription() const = 0;
-};
 
-class Standard : public Service {
-public:
-    Standard(Date startingDate) : Service(startingDate) {};
-};
-
-class NonStandard : public Service {
-    NonStandard(Date startingDate, string description ,float price, int duration);
-};
-
-class OilChange : public Standard {
-public:
-    OilChange(Date startingDate);
-};
-
-class Inspection : public Standard {
-public:
-    Inspection(Date startingDate);
-};
-
-class CarWash : public Standard {
-public:
-    CarWash(Date startingDate);
-};
 
 #endif //AEDA_PROJECT_WORKSHOP_H

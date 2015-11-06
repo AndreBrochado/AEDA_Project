@@ -94,38 +94,4 @@ const string &AutoRepairShop::getName() const {
     return this->name;
 }
 
-// ===================================== SERVICES ===================================== //
-
-Service::Service(Date startingDate){
-    tm temp{0};
-    temp.tm_year = startingDate.year - 1990;
-    temp.tm_mon = startingDate.month - 1;
-    temp.tm_mday = startingDate.day;
-    this->startingDate = mktime(&temp);
-}
-
-NonStandard::NonStandard(Date startingDate, string description, float price, int duration) : Service(startingDate) {
-    this->description = description;
-    this->price = price;
-    this->duration = duration;
-}
-
-OilChange::OilChange(Date startingDate) : Standard(startingDate) {
-    this->description = "Oil Change";
-    this->duration = 0;
-    this->price = 14.99;
-}
-
-Inspection::Inspection(Date startingDate) : Standard(startingDate) {
-    this->description = "Inspection";
-    this->duration = 1;
-    this->price = 24.99;
-}
-
-CarWash::CarWash(Date startingDate) : Standard(startingDate) {
-    this->description = "Car Wash";
-    this->duration = 0;
-    this->price = 9.49;
-}
-
 
