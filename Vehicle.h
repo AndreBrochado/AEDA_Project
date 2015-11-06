@@ -10,20 +10,19 @@
 using namespace std;
 
 class Vehicle {
-    string manufacturer, model, licensePlate, color;
+    string manufacturer, model, licensePlate;
 public:
-    Vehicle(string manufacturer, string model, string licensePlate, string color); //add relevant parameters
+    Vehicle(string manufacturer, string model, string licensePlate); //add relevant parameters
     Vehicle(istream& in);
-    virtual bool setColor(string color); //bool needed?
     virtual int classIdentifier() {return 0;};
     virtual void saveObjectInfo(ostream& out);
-    const string& getLicensePlate() const;
+    const string& getLicensePlate() const{return licensePlate;};
 };
 
 class Automobile : Vehicle {
     int numDoors;
 public:
-    Automobile(string manufacturer, string model, string licensePlate, string color, int numDoors); //add relevant parameters
+    Automobile(string manufacturer, string model, string licensePlate, int numDoors); //add relevant parameters
     Automobile(istream& in);
     int classIdentifier() {return 1;};
     void saveObjectInfo(ostream& out);
@@ -32,7 +31,7 @@ public:
 class Motorcycle : Vehicle {
     string type;
 public:
-    Motorcycle(string manufacturer, string model, string licensePlate, string color, string type); //add relevant parameters
+    Motorcycle(string manufacturer, string model, string licensePlate, string type); //add relevant parameters
     Motorcycle(istream& in);
     int classIdentifier() {return 2;};
     void saveObjectInfo(ostream& out);
@@ -41,7 +40,7 @@ public:
 class Truck : Vehicle {
     int maxWeight;
 public:
-    Truck(string manufacturer, string model, string licensePlate, string color, int maxWeight); //add relevant parameters
+    Truck(string manufacturer, string model, string licensePlate, int maxWeight); //add relevant parameters
     Truck(istream& in);
     int classIdentifier() {return 3;};
     void saveObjectInfo(ostream& out);
@@ -50,7 +49,7 @@ public:
 class Bus : Vehicle {
     int numSittingSpots, numStandingSpots;
 public:
-    Bus(string manufacturer, string model, string licensePlate, string color, int numSittingSpots, int numStandingSpots); //add relevant parameters
+    Bus(string manufacturer, string model, string licensePlate, int numSittingSpots, int numStandingSpots); //add relevant parameters
     Bus(istream& in);
     int classIdentifier() {return 3;};
     void saveObjectInfo(ostream& out);

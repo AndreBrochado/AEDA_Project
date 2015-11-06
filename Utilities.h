@@ -7,7 +7,6 @@
 
 #include <iostream>
 #include <vector>
-#include "AutoRepairShop.h"
 
 using namespace std;
 
@@ -28,31 +27,12 @@ bool addsIfNotExist(T obj, vector<T>& v){
     return true;
 }
 
-bool operator==(const Client &c1,const Client &c2){
-    return c1.getID() == c2.getID();
-}
+bool readString(const string &prompt, string &returnString);
 
-bool operator==(const Employee &e1, const Employee &e2){
-    return e1.getID() == e2.getID();
-}
-
-bool operator==(const Vehicle &v1, const Vehicle &v2){
-    return v1.getLicensePlate() == v2.getLicensePlate();
-}
-
-bool readString(const string &prompt, string &returnString) {
-    string testString;
-    cout << prompt;
-    getline(cin, testString);
-    cout << endl;
-    if (cin.fail()) {
-        if (!cin.eof())
-            cin.ignore(1000, '\n');
-        cin.clear();
-        return false;
-    }
-    returnString = testString;
-    return true;
-}
+struct Date{
+    int day;
+    int month;
+    int year;
+};
 
 #endif //AEDA_PROJECT_UTILITIES_H

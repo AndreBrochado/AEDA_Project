@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "Vehicle.h"
+#include "Utilities.h"
 
 using namespace std;
 
@@ -20,11 +21,13 @@ protected:
 public:
     Person(string name);
     Person(istream& in, vector<string>& licensePlates);
-    virtual void saveObjectInfo(ostream& out);
+    void saveObjectInfo(ostream& out);
     Vehicle* vehicleWithLicensePlate(string licensePlate);
+    bool addVehicle(Vehicle* vehicle);
 
     void setID(int id){this->id = id;};
     int getID() const{return id;};
+    string getName() const{return name;};
     class InexistentVehicle{
         string licensePlate;
     public:
@@ -37,16 +40,12 @@ class Client : public Person {
 public:
     Client(string name) : Person(name){};
     Client(istream& in, vector<string>& licensePlates) : Person(in, licensePlates){};
-    bool addVehicle(Vehicle* vehicle); //bool needed?
-    void saveObjectInfo(ostream& out);
 };
 
 class Employee : public Person {
 public:
     Employee(string name) : Person(name){};
     Employee(istream& in, vector<string>& licensePlates) : Person(in, licensePlates){};
-    bool assignVehicle(Vehicle* vehicle); //bool needed ?
-    void saveObjectInfo(ostream& out);
 };
 
 class AutoRepairShop {
@@ -64,8 +63,6 @@ public:
     const string& getName() const;
 };
 
-
-
 class Service {
 protected:
     string description;
@@ -73,17 +70,34 @@ protected:
     time_t startingDate;
     int duration;
 public:
-    Service(int day, int month, int year);
+    Service(Date startingDate);
     virtual float getPrice() const = 0;
+    virtual float getDuration() const = 0;
+    virtual float getDescription() const = 0;
 };
 
-class Standard : Service {
+class Standard : public Service {
 public:
-    Standard(int day, int month, int year) : Service(day, month, year) {};
+    Standard(Date startingDate) : Service(startingDate) {};
 };
 
-class NonStandard : Service {
-    NonStandard(int day, int month, int year, string description ,float price, int duration);
+class NonStandard : public Service {
+    NonStandard(Date startingDate, string description ,float price, int duration);
+};
+
+class OilChange : public Standard {
+public:
+    OilChange(Date startingDate);
+};
+
+class Inspection : public Standard {
+public:
+    Inspection(Date startingDate);
+};
+
+class CarWash : public Standard {
+public:
+    CarWash(Date startingDate);
 };
 
 #endif //AEDA_PROJECT_WORKSHOP_H
