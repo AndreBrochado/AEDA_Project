@@ -24,6 +24,7 @@ Person::Person(istream &in, vector<string>& licensePlates) {
             throw(e);
         }
         licensePlates.push_back(testString);
+        in >> testString;
     }
     this->id = atoi(testString.c_str());
 }

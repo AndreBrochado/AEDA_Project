@@ -61,6 +61,9 @@ public:
     bool addEmployee(Employee employee); //bool needed ?
     bool addVehicle(Vehicle* vehicle); //bool needed ?
     const string& getName() const;
+    vector<Vehicle *> getVehicles() const {return vehicles;};
+    vector<Employee> getEmployees() const {return employees;};
+    vector<Client> getClients() const {return clients;};
 };
 
 

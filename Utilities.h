@@ -7,8 +7,11 @@
 
 #include <iostream>
 #include <vector>
+#include "Service.h"
 
 using namespace std;
+
+struct Date;
 
 template<class T>
 bool exists(T obj, const vector<T>& v){
@@ -29,10 +32,18 @@ bool addsIfNotExist(T obj, vector<T>& v){
 
 bool readString(const string &prompt, string &returnString);
 
-struct Date{
-    int day;
-    int month;
-    int year;
-};
+ostream& operator<<(ostream& out, Date &d1);
+
+template <class T>
+void writeVector(vector<T> vec, ostream& out){
+    for(size_t i = 0; i < vec.size(); i++){
+        vec[i].saveObjectInfo(out);
+        if(i != vec.size()-1)
+            out<<endl;
+    }
+}
+
+
+
 
 #endif //AEDA_PROJECT_UTILITIES_H

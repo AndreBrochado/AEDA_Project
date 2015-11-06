@@ -27,3 +27,48 @@ bool ConfigFile::existsFile(string &filename) {
     inputStream.close();
     return result;
 }
+
+bool VehiclesFile::saveData(AutoRepairShop &repairShop, bool overwrite) {
+    if(!overwrite && existsFile(filename))
+        return false;
+    ofstream out;
+    out.open(this->filename);
+    for(size_t i = 0; i < repairShop.getVehicles().size(); i++){
+        repairShop.getVehicles()[i]->saveObjectInfo(out);
+        if(i != repairShop.getVehicles().size()-1)
+            out<<endl;
+    }
+    out.close();
+    return true;
+}
+
+bool ClientsFile::saveData(AutoRepairShop &repairShop, bool overwrite) {
+    if(!overwrite && existsFile(filename))
+        return false;
+    ofstream out;
+    out.open(this->filename);
+    writeVector(repairShop.getClients(), out);
+    out.close();
+    return true;
+}
+
+bool EmployeesFile::saveData(AutoRepairShop &repairShop, bool overwrite) {
+    if(!overwrite && existsFile(filename))
+        return false;
+    ofstream out;
+    out.open(this->filename);
+    writeVector(repairShop.getEmployees(), out);
+    out.close();
+    return true;
+}
+
+bool AutoRepairShopFile::saveData(AutoRepairShop &repairShop, string &vehiclesFilename, string &clientsFilename,
+                                  string &employeesFileName, bool overwrite) {
+    if(!overwrite && existsFile(filename))
+        return false;
+    ofstream out;
+    out.open(this->filename);
+    out<<vehiclesFilename << endl << clientsFilename << endl << employeesFileName;
+    out.close();
+    return true;
+}

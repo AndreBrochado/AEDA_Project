@@ -4,6 +4,11 @@
 
 #include "Utilities.h"
 
+ostream& operator<<(ostream& out, Date &d1){
+    out<<d1.day<<"/"<<d1.month<<"/"<<d1.year;
+    return out;
+}
+
 bool readString(const string &prompt, string &returnString) {
     string testString;
     cout << prompt;
@@ -18,3 +23,4 @@ bool readString(const string &prompt, string &returnString) {
     returnString = testString;
     return true;
 }
+

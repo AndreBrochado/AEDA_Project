@@ -9,33 +9,37 @@
 
 
 class ConfigFile {
+protected:
     string filename;
 public:
     ConfigFile(string &filename);
     void createFile(string &filename);
     bool existsFile(string &filename);
+
 };
 
 class AutoRepairShopFile : ConfigFile {
 public:
     AutoRepairShopFile(string &filename) : ConfigFile(filename) { }
-    bool saveData(AutoRepairShop &repairShop, string &thisFilename, string &vehiclesFilename, string &clientsFilename, string &employeesFileName);
+    bool saveData(AutoRepairShop &repairShop, string &vehiclesFilename, string &clientsFilename, string &employeesFileName, bool overwrite);
 };
 
 class VehiclesFile : ConfigFile {
 public:
     VehiclesFile(string &filename) : ConfigFile(filename) { }
-    bool saveData(string &thisFilename);
+    bool saveData(AutoRepairShop &repairShop, bool overwrite);
 };
 
 class ClientsFile : ConfigFile {
 public:
     ClientsFile(string &filename) : ConfigFile(filename) { }
+    bool saveData(AutoRepairShop &repairShop, bool overwrite);
 };
 
 class EmployeesFile : ConfigFile {
 public:
     EmployeesFile(string &filename) : ConfigFile(filename) { }
+    bool saveData(AutoRepairShop &repairShop, bool overwrite);
 };
 
 
