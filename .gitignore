@@ -26,3 +26,9 @@
 *.exe
 *.out
 *.app
+
+# CLion Files
+*.xml
+*.name
+*.iml
+CMakeLists.txt
