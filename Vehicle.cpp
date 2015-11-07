@@ -20,7 +20,8 @@ Vehicle::Vehicle(istream& in) {
     in >> testString;
     while(testString.find("-") == string::npos){
         classIdentifier = atoi(testString.c_str());
-        this->services.push_back(createServiceObject(classIdentifier, in));
+        this->services.push_back(createServiceObject(in, classIdentifier));
+        testString = "";
         in>>testString;
     }
     this->licensePlate = testString;
@@ -108,4 +109,26 @@ Bus::Bus(istream &in) : Vehicle(in) {
 void Bus::saveObjectInfo(ostream &out) {
     Vehicle::saveObjectInfo(out);
     out << endl << this->numSittingSpots << " " << this->numStandingSpots;
+}
+
+Vehicle* createVehicleObject(istream& in, int classIdentifier){
+    Vehicle* newVehicle;
+    switch(classIdentifier){
+        case 1:
+            newVehicle = new Automobile(in);
+            break;
+        case 2:
+            newVehicle = new Motorcycle(in);
+            break;
+        case 3:
+            newVehicle = new Truck(in);
+            break;
+        case 4:
+            newVehicle = new Bus(in);
+            break;
+        default:
+            exception e; //TODO SPECIFY
+            throw(e);
+    }
+    return newVehicle;
 }

@@ -52,7 +52,7 @@ CarWash::CarWash(Date startingDate) : StandardService(startingDate) {
     this->price = 9.49;
 }
 
-Service* createServiceObject(int classIdentifier, istream& in){
+Service* createServiceObject(istream& in, int classIdentifier){
     Service* newService;
     switch(classIdentifier){
         case 2:

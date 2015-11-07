@@ -20,9 +20,10 @@ public:
     virtual void saveObjectInfo(ostream& out);
     bool addService(Service* s1);
     const string& getLicensePlate() const{return licensePlate;};
+    const string& getManufacturer() const { return manufacturer;};
 };
 
-class Automobile : Vehicle {
+class Automobile : public Vehicle {
     int numDoors;
 public:
     Automobile(string manufacturer, string model, string licensePlate, int numDoors); //add relevant parameters
@@ -31,7 +32,7 @@ public:
     void saveObjectInfo(ostream& out);
     };
 
-class Motorcycle : Vehicle {
+class Motorcycle : public Vehicle {
     string type;
 public:
     Motorcycle(string manufacturer, string model, string licensePlate, string type); //add relevant parameters
@@ -40,7 +41,7 @@ public:
     void saveObjectInfo(ostream& out);
     };
 
-class Truck : Vehicle {
+class Truck : public Vehicle {
     int maxWeight;
 public:
     Truck(string manufacturer, string model, string licensePlate, int maxWeight); //add relevant parameters
@@ -49,7 +50,7 @@ public:
     void saveObjectInfo(ostream& out);
     };
 
-class Bus : Vehicle {
+class Bus : public Vehicle {
     int numSittingSpots, numStandingSpots;
 public:
     Bus(string manufacturer, string model, string licensePlate, int numSittingSpots, int numStandingSpots); //add relevant parameters
@@ -57,5 +58,7 @@ public:
     int classIdentifier() {return 3;};
     void saveObjectInfo(ostream& out);
     };
+
+Vehicle* createVehicleObject(istream &in, int classIdentifier);
 
 #endif //AEDA_PROJECT_VEHICLE_H

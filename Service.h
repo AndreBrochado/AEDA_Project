@@ -84,6 +84,6 @@ public:
     const string& getDescription() const {return description;};
 };
 
-Service* createServiceObject(int classIdentifier, istream& in);
+Service* createServiceObject(istream& in, int classIdentifier);
 
 #endif //AEDA_PROJECT_SERVICE_H
