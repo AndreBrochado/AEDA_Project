@@ -37,14 +37,6 @@ void Person::saveObjectInfo(ostream& out) {
     out << this->id;
 }
 
-Vehicle *Person::vehicleWithLicensePlate(string licensePlate) {
-    for(size_t i = 0; i < vehicles.size(); i++){
-        if(vehicles[i]->getLicensePlate() == licensePlate)
-            return vehicles[i];
-    }
-    throw(InexistentVehicle(licensePlate));
-}
-
 bool Person::addVehicle(Vehicle *vehicle) {
     return addsIfNotExist(vehicle, this->vehicles);
 }
@@ -61,6 +53,14 @@ bool operator==(const Person &p1,const Person &p2){
 
 AutoRepairShop::AutoRepairShop(string name) {
     this->name = name;
+}
+
+Vehicle* AutoRepairShop::vehicleWithLicensePlate(string licensePlate) {
+    for(size_t i = 0; i < vehicles.size(); i++){
+        if(vehicles[i]->getLicensePlate() == licensePlate)
+            return vehicles[i];
+    }
+    throw(InexistentVehicle(licensePlate));
 }
 
 bool AutoRepairShop::isClient(Client client1) {

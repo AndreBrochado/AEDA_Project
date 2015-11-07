@@ -22,18 +22,11 @@ public:
     Person(string name);
     Person(istream& in, vector<string>& licensePlates);
     void saveObjectInfo(ostream& out);
-    Vehicle* vehicleWithLicensePlate(string licensePlate);
     bool addVehicle(Vehicle* vehicle);
 
     void setID(int id){this->id = id;};
     int getID() const{return id;};
     string getName() const{return name;};
-    class InexistentVehicle{
-        string licensePlate;
-    public:
-        InexistentVehicle(string licensePlate) : licensePlate(licensePlate){};
-        const string& getLicensePlate(){return licensePlate;};
-    };
 };
 
 class Client : public Person {
@@ -55,6 +48,7 @@ class AutoRepairShop {
     vector<Client> clients;
 public:
     AutoRepairShop(string name);
+    Vehicle* vehicleWithLicensePlate(string licensePlate);
     bool isClient(Client client1);
     bool isEmployee(Employee employee1);
     bool addClient(Client client); //bool needed ?
@@ -64,6 +58,12 @@ public:
     vector<Vehicle *> getVehicles() const {return vehicles;};
     vector<Employee> getEmployees() const {return employees;};
     vector<Client> getClients() const {return clients;};
+    class InexistentVehicle{
+        string licensePlate;
+    public:
+        InexistentVehicle(string licensePlate) : licensePlate(licensePlate){};
+        const string& getLicensePlate(){return licensePlate;};
+    };
 };
 
 
