@@ -18,7 +18,10 @@ public:
     Vehicle(istream& in);
     virtual int classIdentifier() {return 0;};
     virtual void saveObjectInfo(ostream& out);
+    virtual void printObjectInfo();
+    void printServices();
     bool addService(Service* s1);
+    bool removeService(Service* s1);
     const string& getLicensePlate() const{return licensePlate;};
     const string& getManufacturer() const { return manufacturer;};
 };
@@ -30,6 +33,7 @@ public:
     Automobile(istream& in);
     int classIdentifier() {return 1;};
     void saveObjectInfo(ostream& out);
+    void printObjectInfo();
     };
 
 class Motorcycle : public Vehicle {
@@ -39,6 +43,7 @@ public:
     Motorcycle(istream& in);
     int classIdentifier() {return 2;};
     void saveObjectInfo(ostream& out);
+    void printObjectInfo();
     };
 
 class Truck : public Vehicle {
@@ -48,6 +53,7 @@ public:
     Truck(istream& in);
     int classIdentifier() {return 3;};
     void saveObjectInfo(ostream& out);
+    void printObjectInfo();
     };
 
 class Bus : public Vehicle {
@@ -57,6 +63,7 @@ public:
     Bus(istream& in);
     int classIdentifier() {return 3;};
     void saveObjectInfo(ostream& out);
+    void printObjectInfo();
     };
 
 Vehicle* createVehicleObject(istream &in, int classIdentifier);

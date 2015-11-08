@@ -13,16 +13,16 @@ Vehicle::Vehicle(string manufacturer, string model, string licensePlate) {
     this->licensePlate = licensePlate;
 }
 
-Vehicle::Vehicle(istream& in) {
+Vehicle::Vehicle(istream &in) {
     string testString = "";
     int classIdentifier = 0;
     in >> this->manufacturer >> this->model;
     in >> testString;
-    while(testString.find("-") == string::npos){
+    while (testString.find("-") == string::npos) {
         classIdentifier = atoi(testString.c_str());
         this->services.push_back(createServiceObject(in, classIdentifier));
         testString = "";
-        in>>testString;
+        in >> testString;
     }
     this->licensePlate = testString;
 }
@@ -30,9 +30,9 @@ Vehicle::Vehicle(istream& in) {
 void Vehicle::saveObjectInfo(ostream &out) {
     out << this->classIdentifier() << endl
     << this->manufacturer << " " << this->model << endl;
-    for(size_t i = 0; i < services.size(); i++){
+    for (size_t i = 0; i < services.size(); i++) {
         services[i]->saveObjectInfo(out);
-        out<< endl;
+        out << endl;
     }
     out << this->licensePlate;
 }
@@ -41,7 +41,15 @@ bool Vehicle::addService(Service *s1) {
     return addsIfNotExist(s1, services);
 }
 
-bool operator==(const Vehicle &v1, const Vehicle &v2){
+bool Vehicle::removeService(Service *s1) {
+    int index = sequentialSearch(services, s1);
+    if (index == -1)
+        return false; //TODO throw(InexistentService)
+    services.erase(services.begin(), services.begin() + index);
+    return true;
+}
+
+bool operator==(const Vehicle &v1, const Vehicle &v2) {
     return v1.getLicensePlate() == v2.getLicensePlate();
 }
 
@@ -111,9 +119,9 @@ void Bus::saveObjectInfo(ostream &out) {
     out << endl << this->numSittingSpots << " " << this->numStandingSpots;
 }
 
-Vehicle* createVehicleObject(istream& in, int classIdentifier){
-    Vehicle* newVehicle;
-    switch(classIdentifier){
+Vehicle *createVehicleObject(istream &in, int classIdentifier) {
+    Vehicle *newVehicle;
+    switch (classIdentifier) {
         case 1:
             newVehicle = new Automobile(in);
             break;
@@ -128,7 +136,47 @@ Vehicle* createVehicleObject(istream& in, int classIdentifier){
             break;
         default:
             exception e; //TODO SPECIFY
-            throw(e);
+            throw (e);
     }
     return newVehicle;
+}
+
+void Vehicle::printObjectInfo() {
+    cout << "Manufacturer and Model: " << this->manufacturer << " " << this->model << endl
+    << "License Plate: " << this->licensePlate;
+    for (size_t i = 0; i < services.size(); i++) {
+        cout << endl;
+        services[i]->printObjectInfo();
+    }
+}
+
+void Automobile::printObjectInfo() {
+    Vehicle::printObjectInfo();
+    cout << endl << "Automobile number of doors: " << this->numDoors;
+}
+
+void Motorcycle::printObjectInfo() {
+    Vehicle::printObjectInfo();
+    cout << endl << "Motorcycle type: " << this->type;
+}
+
+void Truck::printObjectInfo() {
+    Vehicle::printObjectInfo();
+    cout << endl << "Truck's maximum weight: " << this->maxWeight;
+}
+
+void Bus::printObjectInfo() {
+    Vehicle::printObjectInfo();
+    cout << endl << "Bus' number of Sitting - Standing spots: " << this->numSittingSpots << " - " <<
+    this->numStandingSpots;
+}
+
+void Vehicle::printServices() {
+    if(services.size() == 0)
+        cout << "This vehicle never got any services from us.";
+    for(size_t i = 0; i < services.size(); i++){
+        services[i]->printObjectInfo();
+        if(i != services.size() - 1)
+            cout<< endl;
+    }
 }

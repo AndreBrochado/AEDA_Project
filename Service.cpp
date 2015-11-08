@@ -23,6 +23,13 @@ void Service::saveObjectInfo(ostream &out) {
     out<< this->classIdentifier() << endl << this->description << endl << this->price << endl << this->startingDate << endl << duration;
 }
 
+void Service::printObjectInfo() {
+    time_t endingDateInSeconds = startingDate + 24*60*60*duration;
+    tm* endingDate = localtime(&endingDateInSeconds);
+    cout<< "Service: " << this->description << endl << "Price: " << this->price << endl << "Starting - End Date: " << getStartingDate().day << "/" << getStartingDate().month << getStartingDate().year
+            << " - " << endingDate->tm_mday << "/" << endingDate->tm_mon+1 << "/" << endingDate->tm_year+1900;
+}
+
 Date Service::getStartingDate() const {
     tm* date = localtime(&startingDate);
     return Date{date->tm_mday, date->tm_mon+1, date->tm_year+1900};

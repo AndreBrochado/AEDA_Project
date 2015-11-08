@@ -15,35 +15,41 @@ public:
     ConfigFile(string &filename);
     void createFile(string &filename);
     bool existsFile(string &filename);
-    class BadFileException{
+    class FileException{
+    protected:
         string filename;
     public:
-        BadFileException(string &filename){this->filename = filename;};
+        FileException(string &filename){this->filename = filename;};
         const string& getFilename() const {return this->filename;};
+        virtual void showErrorMessage() const = 0;
     };
-    class InexistentFileException{
-        string filename;
+    class BadFileException : public FileException{
     public:
-        InexistentFileException(string &filename){this->filename = filename;};
-        const string& getFilename() const {return this->filename;};
+        BadFileException(string &filename) : FileException(filename){};
+        void showErrorMessage() const{cout<<"File "<<filename<<" doesn't have the correct format.";};
+    };
+    class InexistentFileException : public FileException{
+    public:
+        InexistentFileException(string &filename) : FileException{filename}{};
+        void showErrorMessage() const{cout<<"File "<<filename<<" doesn't exist.";};
     };
 };
 
-class AutoRepairShopFile : ConfigFile {
+class AutoRepairShopFile : public ConfigFile {
 public:
     AutoRepairShopFile(string &filename) : ConfigFile(filename) { }
     bool saveData(AutoRepairShop &repairShop, string &vehiclesFilename, string &clientsFilename, string &employeesFileName, bool overwrite=false);
     AutoRepairShop loadData();
 };
 
-class VehiclesFile : ConfigFile {
+class VehiclesFile : public ConfigFile {
 public:
     VehiclesFile(string &filename) : ConfigFile(filename) { }
     bool saveData(AutoRepairShop &repairShop, bool overwrite=false);
     bool loadData(AutoRepairShop &repairShop);
 };
 
-class ClientsFile : ConfigFile {
+class ClientsFile : public ConfigFile {
 public:
     ClientsFile(string &filename) : ConfigFile(filename) { }
     Client createClientObject(istream &in, vector<string> licensePlates, AutoRepairShop &repairShop);
@@ -51,7 +57,7 @@ public:
     bool loadData(AutoRepairShop &repairShop);
 };
 
-class EmployeesFile : ConfigFile {
+class EmployeesFile : public ConfigFile {
 public:
     EmployeesFile(string &filename) : ConfigFile(filename) { }
     Employee createEmployeeObject(istream &in, vector<string> licensePlates, AutoRepairShop &repairShop);

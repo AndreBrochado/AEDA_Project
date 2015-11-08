@@ -26,6 +26,7 @@ public:
     Service(istream& in);
     virtual int classIdentifier() {return 0;};
     virtual void saveObjectInfo(ostream& out);
+    void printObjectInfo();
     virtual float getPrice() const = 0;
     virtual int getDuration() const = 0;
     virtual const string& getDescription() const = 0;
