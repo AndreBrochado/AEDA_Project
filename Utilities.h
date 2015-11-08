@@ -8,10 +8,15 @@
 #include <iostream>
 #include <vector>
 #include "Service.h"
+#include "AutoRepairShop.h"
 
 using namespace std;
 
 struct Date;
+
+class Person;
+
+bool operator==(const Person &p1, const Person &p2);
 
 template<class T>
 bool exists(T obj, const vector<T>& v){

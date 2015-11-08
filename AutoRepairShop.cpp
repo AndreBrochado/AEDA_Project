@@ -44,7 +44,7 @@ bool Person::addVehicle(Vehicle *vehicle) {
 }
 
 bool operator==(const Person &p1, const Person &p2) {
-    return p1.getID() == p2.getID() && p1.getName() == p2.getName();
+    return p1.getName() == p2.getName();
 }
 
 bool operator<(const Employee &e1, const Employee &e2) {
@@ -153,7 +153,7 @@ bool AutoRepairShop::removeEmployee(Employee employee) {
     int index = sequentialSearch(employees, employee);
     if (index == -1) // TODO throw(InexistentEmployee)
         return false;
-    vector<Vehicle *> employeeVehicles = employee.getVehicles();
+    vector<Vehicle *> employeeVehicles = employee.getVehicles(); // - working ?
     employees.erase(employees.begin(), employees.begin() + index);
     for (size_t i = 0; i < employeeVehicles.size(); i++) {
         assignEmployee(employeeVehicles[i]);

@@ -10,6 +10,8 @@
 
 using namespace std;
 
+class Service;
+
 class Vehicle {
     string manufacturer, model, licensePlate;
     vector<Service*> services;
@@ -24,6 +26,7 @@ public:
     bool removeService(Service* s1);
     const string& getLicensePlate() const{return licensePlate;};
     const string& getManufacturer() const { return manufacturer;};
+    const string& getModel() const { return model;};
 };
 
 class Automobile : public Vehicle {
@@ -61,7 +64,7 @@ class Bus : public Vehicle {
 public:
     Bus(string manufacturer, string model, string licensePlate, int numSittingSpots, int numStandingSpots); //add relevant parameters
     Bus(istream& in);
-    int classIdentifier() {return 3;};
+    int classIdentifier() {return 4;};
     void saveObjectInfo(ostream& out);
     void printObjectInfo();
     };

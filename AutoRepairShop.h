@@ -13,6 +13,8 @@
 
 using namespace std;
 
+class Vehicle;
+
 class Person {
 protected:
     string name;
@@ -79,7 +81,7 @@ public:
         string licensePlate;
     public:
         InexistentVehicle(string licensePlate) : licensePlate(licensePlate){};
-        const string& getLicensePlate(){return licensePlate;};
+        void showErrorMessage(){cout << "There isn't a vehicle with the license plate " << this->licensePlate;};
     };
 };
 
