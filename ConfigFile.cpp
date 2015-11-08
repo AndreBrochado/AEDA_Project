@@ -18,22 +18,21 @@ void ConfigFile::createFile(string &filename) {
     outputStream.close();
 }
 
-Client ClientsFile::createClientObject(istream &in, vector<string> licensePlates, AutoRepairShop &repairShop){
-    Client newClient(in, licensePlates);
-    for(size_t i = 0; i < licensePlates.size(); i++){
+Client ClientsFile::createClientObject(istream &in, string name, vector<string> licensePlates, AutoRepairShop &repairShop) {
+    Client newClient(in, name, licensePlates);
+    for (size_t i = 0; i < licensePlates.size(); i++) {
         newClient.addVehicle(repairShop.vehicleWithLicensePlate(licensePlates[i]));
     }
     return newClient;
 }
 
-Employee EmployeesFile::createEmployeeObject(istream &in, vector<string> licensePlates, AutoRepairShop &repairShop) {
-    Employee newEmployee(in, licensePlates);
-    for(size_t i = 0; i < licensePlates.size(); i++){
+Employee EmployeesFile::createEmployeeObject(istream &in, string name, vector<string> licensePlates, AutoRepairShop &repairShop) {
+    Employee newEmployee(in, name, licensePlates);
+    for (size_t i = 0; i < licensePlates.size(); i++) {
         newEmployee.addVehicle(repairShop.vehicleWithLicensePlate(licensePlates[i]));
     }
     return newEmployee;
 }
-
 
 bool ConfigFile::existsFile(string &filename) {
     ifstream inputStream;
@@ -46,21 +45,21 @@ bool ConfigFile::existsFile(string &filename) {
 }
 
 bool VehiclesFile::saveData(AutoRepairShop &repairShop, bool overwrite) {
-    if(!overwrite && existsFile(filename))
+    if (!overwrite && existsFile(filename))
         return false;
     ofstream out;
     out.open(this->filename);
-    for(size_t i = 0; i < repairShop.getVehicles().size(); i++){
+    for (size_t i = 0; i < repairShop.getVehicles().size(); i++) {
         repairShop.getVehicles()[i]->saveObjectInfo(out);
-        if(i != repairShop.getVehicles().size()-1)
-            out<<endl;
+        if (i != repairShop.getVehicles().size() - 1)
+            out << endl;
     }
     out.close();
     return true;
 }
 
 bool ClientsFile::saveData(AutoRepairShop &repairShop, bool overwrite) {
-    if(!overwrite && existsFile(filename))
+    if (!overwrite && existsFile(filename))
         return false;
     ofstream out;
     out.open(this->filename);
@@ -70,7 +69,7 @@ bool ClientsFile::saveData(AutoRepairShop &repairShop, bool overwrite) {
 }
 
 bool EmployeesFile::saveData(AutoRepairShop &repairShop, bool overwrite) {
-    if(!overwrite && existsFile(filename))
+    if (!overwrite && existsFile(filename))
         return false;
     ofstream out;
     out.open(this->filename);
@@ -81,27 +80,31 @@ bool EmployeesFile::saveData(AutoRepairShop &repairShop, bool overwrite) {
 
 bool AutoRepairShopFile::saveData(AutoRepairShop &repairShop, string &vehiclesFilename, string &clientsFilename,
                                   string &employeesFileName, bool overwrite) {
-    if(!overwrite && existsFile(filename))
+    if (!overwrite && existsFile(filename))
         return false;
     ofstream out;
     out.open(this->filename);
-    out<<vehiclesFilename << endl << clientsFilename << endl << employeesFileName << endl << repairShop.getName();
+    out << vehiclesFilename << endl << clientsFilename << endl << employeesFileName << endl << repairShop.getName();
     out.close();
     VehiclesFile vf(vehiclesFilename);
     ClientsFile cf(clientsFilename);
     EmployeesFile ef(employeesFileName);
-    return true;
+    for (size_t i = 0; i < repairShop.getVehicles().size(); i++) {
+        repairShop.assignEmployee(repairShop.getVehicles()[i]);
+    }
+    return (vf.saveData(repairShop, overwrite) && cf.saveData(repairShop, overwrite) &&
+            ef.saveData(repairShop, overwrite));
 }
 
 bool VehiclesFile::loadData(AutoRepairShop &repairShop) {
     ifstream in;
-    Vehicle* v;
+    Vehicle *v;
     int classIdentifier = 0;
-    if(!existsFile(this->filename))
+    if (!existsFile(this->filename))
         return false;
     in.open(this->filename);
     in >> classIdentifier;
-    while(!in.eof()){
+    while (!in.eof()) {
         v = createVehicleObject(in, classIdentifier);
         repairShop.addVehicle(v);
         in >> classIdentifier;
@@ -111,48 +114,45 @@ bool VehiclesFile::loadData(AutoRepairShop &repairShop) {
 
 bool ClientsFile::loadData(AutoRepairShop &repairShop) {
     ifstream in;
+    string name;
     vector<string> licensePlates;
-    if(!existsFile(this->filename))
+    if (!existsFile(this->filename))
         return false;
     in.open(this->filename);
-    try {
-       Client c = createClientObject(in, licensePlates, repairShop);
-        while (!in.eof()) {
-            repairShop.addClient(c);
-            c = createClientObject(in, licensePlates, repairShop);
-        }
-    }catch(exception e){};
+    while(getline(in, name)){
+        Client c = createClientObject(in, name, licensePlates, repairShop);
+        repairShop.addClient(c);
+    }
     return true;
 }
 
 bool EmployeesFile::loadData(AutoRepairShop &repairShop) {
     ifstream in;
+    string name;
     vector<string> licensePlates;
-    if(!existsFile(this->filename))
+    if (!existsFile(this->filename))
         return false;
     in.open(this->filename);
-    try {
-        Employee e = createEmployeeObject(in, licensePlates, repairShop);
-        while (!in.eof()) {
-            repairShop.addEmployee(e);
-            e = createEmployeeObject(in, licensePlates, repairShop);
-        }
-    }catch(exception e){};
+    while(getline(in, name)){
+        Employee e = createEmployeeObject(in, name, licensePlates, repairShop);
+        repairShop.addEmployee(e);
+    }
     return true;
 }
 
 AutoRepairShop AutoRepairShopFile::loadData() {
     ifstream in;
     string vehiclesFilename = "", clientsFilename = "", employeesFilename = "", repairShopName = "";
-    if(!existsFile(this->filename))
-        throw(InexistentFileException(this->filename));
+    if (!existsFile(this->filename))
+        throw (InexistentFileException(this->filename));
     in.open(this->filename);
     getline(in, vehiclesFilename);
     getline(in, clientsFilename);
     getline(in, employeesFilename);
     getline(in, repairShopName);
-    if(vehiclesFilename == "" || clientsFilename == "" || employeesFilename == "" || repairShopName == "")
-        throw(BadFileException(this->filename));
+    in.close();
+    if (vehiclesFilename == "" || clientsFilename == "" || employeesFilename == "" || repairShopName == "")
+        throw (BadFileException(this->filename));
     VehiclesFile vf(vehiclesFilename);
     ClientsFile cf(clientsFilename);
     EmployeesFile ef(employeesFilename);

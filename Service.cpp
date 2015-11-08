@@ -4,35 +4,32 @@
 
 #include <ctime>
 #include "Service.h"
+#include "ConfigFile.h"
 
 Service::Service(Date startingDate){
-    tm temp{0};
-    temp.tm_year = startingDate.year - 1990;
-    temp.tm_mon = startingDate.month - 1;
-    temp.tm_mday = startingDate.day;
-    this->startingDate = mktime(&temp);
+    this->startingDate = startingDate;
 }
 
 Service::Service(istream &in) {
     getline(in, this->description, '\n');
     in.ignore(1000, '\n');
-    in>> this->price >> this->startingDate >> this->duration;
+    in>> this->price >> this->startingDate.day >> this->startingDate.month >> this->startingDate.year >> this->duration;
 }
 
 void Service::saveObjectInfo(ostream &out) {
-    out<< this->classIdentifier() << endl << this->description << endl << this->price << endl << this->startingDate << endl << duration;
+    out<< this->classIdentifier() << endl << this->description << endl << this->price << endl << this->startingDate.day << " " << this->startingDate.month << " " << this->startingDate.year << endl << this->duration;
 }
 
 void Service::printObjectInfo() {
-    time_t endingDateInSeconds = startingDate + 24*60*60*duration;
-    tm* endingDate = localtime(&endingDateInSeconds);
-    cout<< "Service: " << this->description << endl << "Price: " << this->price << endl << "Starting - End Date: " << getStartingDate().day << "/" << getStartingDate().month << getStartingDate().year
-            << " - " << endingDate->tm_mday << "/" << endingDate->tm_mon+1 << "/" << endingDate->tm_year+1900;
+    Date endingDate = (startingDate + duration);
+    cout<< "Service: " << this->description << endl << "Price: " << this->price << endl << "Starting Date: " << startingDate.day << "/" << startingDate.month << "/" << startingDate.year
+            << endl << "Duration: " << this->duration << " day";
+    if(this->duration != 1)
+        cout<< "s";
 }
 
 Date Service::getStartingDate() const {
-    tm* date = localtime(&startingDate);
-    return Date{date->tm_mday, date->tm_mon+1, date->tm_year+1900};
+    return startingDate;
 }
 
 NonStandardService::NonStandardService(Date startingDate, string description, float price, int duration) : Service(startingDate) {
@@ -75,7 +72,8 @@ Service* createServiceObject(istream& in, int classIdentifier){
             newService = new CarWash(in);
             break;
         default:
-            exception e; //TODO SPECIFY
+            string file = "Vehicles file";
+            ConfigFile::BadFileException e(file);
             throw(e);
     }
     return newService;

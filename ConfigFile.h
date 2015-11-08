@@ -13,55 +13,80 @@ protected:
     string filename;
 public:
     ConfigFile(string &filename);
+
     void createFile(string &filename);
+
     bool existsFile(string &filename);
-    class FileException{
+
+    class FileException {
     protected:
         string filename;
     public:
-        FileException(string &filename){this->filename = filename;};
-        const string& getFilename() const {return this->filename;};
+        FileException(string &filename) { this->filename = filename; };
+
+        const string &getFilename() const { return this->filename; };
+
         virtual void showErrorMessage() const = 0;
     };
-    class BadFileException : public FileException{
+
+    class BadFileException : public FileException {
     public:
-        BadFileException(string &filename) : FileException(filename){};
-        void showErrorMessage() const{cout<<"File "<<filename<<" doesn't have the correct format.";};
+        BadFileException(string &filename) : FileException(filename) { };
+
+        void showErrorMessage() const { cout << filename << " doesn't have the correct format."; };
     };
-    class InexistentFileException : public FileException{
+
+    class InexistentFileException : public FileException {
     public:
-        InexistentFileException(string &filename) : FileException{filename}{};
-        void showErrorMessage() const{cout<<"File "<<filename<<" doesn't exist.";};
+        InexistentFileException(string &filename) : FileException{filename} { };
+
+        void showErrorMessage() const { cout << "File " << filename << " doesn't exist."; };
+    };
+
+    class EmptyFileException {
+    public:
+        EmptyFileException(){};
     };
 };
 
 class AutoRepairShopFile : public ConfigFile {
 public:
     AutoRepairShopFile(string &filename) : ConfigFile(filename) { }
-    bool saveData(AutoRepairShop &repairShop, string &vehiclesFilename, string &clientsFilename, string &employeesFileName, bool overwrite=false);
+
+    bool saveData(AutoRepairShop &repairShop, string &vehiclesFilename, string &clientsFilename,
+                  string &employeesFileName, bool overwrite = false);
+
     AutoRepairShop loadData();
 };
 
 class VehiclesFile : public ConfigFile {
 public:
     VehiclesFile(string &filename) : ConfigFile(filename) { }
-    bool saveData(AutoRepairShop &repairShop, bool overwrite=false);
+
+    bool saveData(AutoRepairShop &repairShop, bool overwrite = false);
+
     bool loadData(AutoRepairShop &repairShop);
 };
 
 class ClientsFile : public ConfigFile {
 public:
     ClientsFile(string &filename) : ConfigFile(filename) { }
-    Client createClientObject(istream &in, vector<string> licensePlates, AutoRepairShop &repairShop);
-    bool saveData(AutoRepairShop &repairShop, bool overwrite=false);
+
+    Client createClientObject(istream &in, string name, vector<string> licensePlates, AutoRepairShop &repairShop);
+
+    bool saveData(AutoRepairShop &repairShop, bool overwrite = false);
+
     bool loadData(AutoRepairShop &repairShop);
 };
 
 class EmployeesFile : public ConfigFile {
 public:
     EmployeesFile(string &filename) : ConfigFile(filename) { }
-    Employee createEmployeeObject(istream &in, vector<string> licensePlates, AutoRepairShop &repairShop);
-    bool saveData(AutoRepairShop &repairShop, bool overwrite=false);
+
+    Employee createEmployeeObject(istream &in, string name, vector<string> licensePlates, AutoRepairShop &repairShop);
+
+    bool saveData(AutoRepairShop &repairShop, bool overwrite = false);
+
     bool loadData(AutoRepairShop &repairShop);
 };
 

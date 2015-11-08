@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include "Vehicle.h"
+#include "ConfigFile.h"
 
 // ================================= VEHICLE ================================= //
 
@@ -44,7 +45,7 @@ bool Vehicle::addService(Service *s1) {
 bool Vehicle::removeService(Service *s1) {
     int index = sequentialSearch(services, s1);
     if (index == -1)
-        return false; //TODO throw(InexistentService)
+        return false;
     services.erase(services.begin(), services.begin() + index);
     return true;
 }
@@ -135,13 +136,14 @@ Vehicle *createVehicleObject(istream &in, int classIdentifier) {
             newVehicle = new Bus(in);
             break;
         default:
-            exception e; //TODO SPECIFY
+            string file = "Vehicles file";
+            ConfigFile::BadFileException e(file);
             throw (e);
     }
     return newVehicle;
 }
 
-void Vehicle::printObjectInfo() {
+void Vehicle::printObjectInfo() const {
     cout << "Manufacturer and Model: " << this->manufacturer << " " << this->model << endl
     << "License Plate: " << this->licensePlate;
     for (size_t i = 0; i < services.size(); i++) {
@@ -150,33 +152,33 @@ void Vehicle::printObjectInfo() {
     }
 }
 
-void Automobile::printObjectInfo() {
+void Automobile::printObjectInfo() const {
     Vehicle::printObjectInfo();
     cout << endl << "Automobile number of doors: " << this->numDoors;
 }
 
-void Motorcycle::printObjectInfo() {
+void Motorcycle::printObjectInfo() const {
     Vehicle::printObjectInfo();
     cout << endl << "Motorcycle type: " << this->type;
 }
 
-void Truck::printObjectInfo() {
+void Truck::printObjectInfo() const {
     Vehicle::printObjectInfo();
     cout << endl << "Truck's maximum weight: " << this->maxWeight;
 }
 
-void Bus::printObjectInfo() {
+void Bus::printObjectInfo() const {
     Vehicle::printObjectInfo();
     cout << endl << "Bus' number of Sitting - Standing spots: " << this->numSittingSpots << " - " <<
     this->numStandingSpots;
 }
 
-void Vehicle::printServices() {
-    if(services.size() == 0)
-        cout << "This vehicle never got any services from us.";
-    for(size_t i = 0; i < services.size(); i++){
+void Vehicle::printServices() const {
+    if (services.size() == 0)
+        cout << "Vehicle " << this->manufacturer << " " << this->model << " never got any services from us.";
+    for (size_t i = 0; i < services.size(); i++) {
         services[i]->printObjectInfo();
-        if(i != services.size() - 1)
-            cout<< endl;
+        if (i != services.size() - 1)
+            cout << endl;
     }
 }

@@ -9,17 +9,18 @@
 
 using namespace std;
 
-struct Date{
+struct Date {
     int day;
     int month;
     int year;
 };
 
+
 class Service {
 protected:
     string description;
     float price;
-    time_t startingDate;
+    Date startingDate;
     int duration;
 public:
     Service(Date startingDate);
