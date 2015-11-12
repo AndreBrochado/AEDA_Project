@@ -1,0 +1,46 @@
+\hypertarget{class_employees_file}{}\section{Employees\+File Class Reference}
+\label{class_employees_file}\index{Employees\+File@{Employees\+File}}
+Inheritance diagram for Employees\+File\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_employees_file}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_employees_file_a8f029a7de1acc27856a379813c4c03e0}{}{\bfseries Employees\+File} (string \&filename)\label{class_employees_file_a8f029a7de1acc27856a379813c4c03e0}
+
+\item 
+\hypertarget{class_employees_file_a4e36311279ed0aab10435eaac5126151}{}\hyperlink{class_employee}{Employee} \hyperlink{class_employees_file_a4e36311279ed0aab10435eaac5126151}{create\+Employee\+Object} (istream \&in, string name, vector$<$ string $>$ license\+Plates, \hyperlink{class_auto_repair_shop}{Auto\+Repair\+Shop} \&repair\+Shop)\label{class_employees_file_a4e36311279ed0aab10435eaac5126151}
+
+\begin{DoxyCompactList}\small\item\em creates and returns an employee, adding all vehicles with license plates on the license\+Plates vector \end{DoxyCompactList}\item 
+\hypertarget{class_employees_file_aa9b65666486f2657808953bf2d9492f4}{}bool \hyperlink{class_employees_file_aa9b65666486f2657808953bf2d9492f4}{save\+Data} (\hyperlink{class_auto_repair_shop}{Auto\+Repair\+Shop} \&repair\+Shop, bool overwrite=false)\label{class_employees_file_aa9b65666486f2657808953bf2d9492f4}
+
+\begin{DoxyCompactList}\small\item\em saves the file data \end{DoxyCompactList}\item 
+bool \hyperlink{class_employees_file_a016b7476237e69b8f08925e85a0cba30}{load\+Data} (\hyperlink{class_auto_repair_shop}{Auto\+Repair\+Shop} \&repair\+Shop)
+\begin{DoxyCompactList}\small\item\em loads data from the file \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_employees_file_a016b7476237e69b8f08925e85a0cba30}{}\index{Employees\+File@{Employees\+File}!load\+Data@{load\+Data}}
+\index{load\+Data@{load\+Data}!Employees\+File@{Employees\+File}}
+\subsubsection[{load\+Data(\+Auto\+Repair\+Shop \&repair\+Shop)}]{\setlength{\rightskip}{0pt plus 5cm}bool Employees\+File\+::load\+Data (
+\begin{DoxyParamCaption}
+\item[{{\bf Auto\+Repair\+Shop} \&}]{repair\+Shop}
+\end{DoxyParamCaption}
+)}\label{class_employees_file_a016b7476237e69b8f08925e85a0cba30}
+
+
+loads data from the file 
+
+\begin{DoxyReturn}{Returns}
+false if the file doesn\textquotesingle{}t exist 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Config\+File.\+h\item 
+Config\+File.\+cpp\end{DoxyCompactItemize}

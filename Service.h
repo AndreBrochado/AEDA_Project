@@ -15,7 +15,10 @@ struct Date {
     int year;
 };
 
-
+/**
+ * @class Service
+ * @brief superclass to StandardService and NonStandardService
+ */
 class Service {
 protected:
     string description;
@@ -34,6 +37,10 @@ public:
     Date getStartingDate() const;
 };
 
+/**
+ * @class StandardService
+ * @brief superclass to OilChange, Inspection and CarWash
+ */
 class StandardService : public Service {
 public:
     StandardService(Date startingDate) : Service(startingDate) {};
@@ -42,6 +49,10 @@ public:
     virtual void saveObjectInfo(ostream& out){Service::saveObjectInfo(out);};
 };
 
+/**
+ * @class NonStandardService
+ * @brief Non Standard Services Performed on Vehicles
+ */
 class NonStandardService : public Service {
 public:
     NonStandardService(Date startingDate, string description ,float price, int duration);
@@ -53,6 +64,10 @@ public:
     const string& getDescription() const {return description;};
 };
 
+/**
+ * @class OilChange
+ * @brief Oil Change Service Performed on Vehicles
+ */
 class OilChange : public StandardService {
 public:
     OilChange(Date startingDate);
@@ -64,6 +79,10 @@ public:
     const string& getDescription() const {return description;};
 };
 
+/**
+ * @class OilChange
+ * @brief Inspection Service Performed on Vehicles
+ */
 class Inspection : public StandardService {
 public:
     Inspection(Date startingDate);

@@ -12,6 +12,10 @@ using namespace std;
 
 class Service;
 
+/**
+ * @class Vehicle
+ * @brief superclass to Automobile, Motorcycle, Truck and Bus
+ */
 class Vehicle {
     string manufacturer, model, licensePlate;
     vector<Service *> services;

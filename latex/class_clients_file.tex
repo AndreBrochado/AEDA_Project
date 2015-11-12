@@ -1,0 +1,60 @@
+\hypertarget{class_clients_file}{}\section{Clients\+File Class Reference}
+\label{class_clients_file}\index{Clients\+File@{Clients\+File}}
+
+
+contains the info of all the clients of the Auto Repair Shop  
+
+
+
+
+{\ttfamily \#include $<$Config\+File.\+h$>$}
+
+Inheritance diagram for Clients\+File\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_clients_file}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_clients_file_a193a5c33a221b9a7a240c8e21325f5bc}{}{\bfseries Clients\+File} (string \&filename)\label{class_clients_file_a193a5c33a221b9a7a240c8e21325f5bc}
+
+\item 
+\hypertarget{class_clients_file_a208a3388f95c5b181708d82f24f73807}{}\hyperlink{class_client}{Client} \hyperlink{class_clients_file_a208a3388f95c5b181708d82f24f73807}{create\+Client\+Object} (istream \&in, string name, vector$<$ string $>$ license\+Plates, \hyperlink{class_auto_repair_shop}{Auto\+Repair\+Shop} \&repair\+Shop)\label{class_clients_file_a208a3388f95c5b181708d82f24f73807}
+
+\begin{DoxyCompactList}\small\item\em creates and returns a client, adding all vehicles with license plates on the license\+Plates vector \end{DoxyCompactList}\item 
+\hypertarget{class_clients_file_a036db9670a49d65576c9b16f6c97b225}{}bool \hyperlink{class_clients_file_a036db9670a49d65576c9b16f6c97b225}{save\+Data} (\hyperlink{class_auto_repair_shop}{Auto\+Repair\+Shop} \&repair\+Shop, bool overwrite=false)\label{class_clients_file_a036db9670a49d65576c9b16f6c97b225}
+
+\begin{DoxyCompactList}\small\item\em saves the file data \end{DoxyCompactList}\item 
+bool \hyperlink{class_clients_file_a503c04b5e98494318abf2a26a0348de9}{load\+Data} (\hyperlink{class_auto_repair_shop}{Auto\+Repair\+Shop} \&repair\+Shop)
+\begin{DoxyCompactList}\small\item\em loads data from the file \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+contains the info of all the clients of the Auto Repair Shop 
+
+contains the info of all the Auto Repair Shop\textquotesingle{}s employees 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_clients_file_a503c04b5e98494318abf2a26a0348de9}{}\index{Clients\+File@{Clients\+File}!load\+Data@{load\+Data}}
+\index{load\+Data@{load\+Data}!Clients\+File@{Clients\+File}}
+\subsubsection[{load\+Data(\+Auto\+Repair\+Shop \&repair\+Shop)}]{\setlength{\rightskip}{0pt plus 5cm}bool Clients\+File\+::load\+Data (
+\begin{DoxyParamCaption}
+\item[{{\bf Auto\+Repair\+Shop} \&}]{repair\+Shop}
+\end{DoxyParamCaption}
+)}\label{class_clients_file_a503c04b5e98494318abf2a26a0348de9}
+
+
+loads data from the file 
+
+\begin{DoxyReturn}{Returns}
+false if the file doesn\textquotesingle{}t exist 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Config\+File.\+h\item 
+Config\+File.\+cpp\end{DoxyCompactItemize}

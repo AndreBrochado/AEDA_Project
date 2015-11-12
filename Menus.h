@@ -1,5 +1,8 @@
 #include "ConfigFile.h"
 
+/**
+ * @returns true if the string contains only an integer
+ */
 bool isInt(string s) {
     for (size_t i = 0; i < s.size(); i++) {
         if (!isdigit(s[i]))
@@ -8,6 +11,9 @@ bool isInt(string s) {
     return true;
 }
 
+/**
+ * @returns true if the string contains only an integer or a float
+ */
 bool isFloat(string s) {
     int numPoints = 0;
     for (size_t i = 0; i < s.size(); i++) {
@@ -19,6 +25,9 @@ bool isFloat(string s) {
     return (numPoints == 0 || numPoints == 1);
 }
 
+/**
+ * @returns true if the string contains only a valid license plate (XX-XX-XX with only 1 consecutive pair of letters and 2 pairs of digits)
+ */
 bool isValidLicensePlate(string licensePlate) {
     if (licensePlate.size() != 8)
         return false;
@@ -38,6 +47,9 @@ bool isValidLicensePlate(string licensePlate) {
     return false;
 }
 
+/**
+ * @brief reads user selection on a menu
+ */
 int getMenuInput(int numberOfOptions) {
     string returnString = "";
     readString("Your selection is: ", returnString);
@@ -48,6 +60,9 @@ int getMenuInput(int numberOfOptions) {
     return atoi(returnString.c_str());
 }
 
+/**
+ * @brief reads filenames to save files
+ */
 void getFilenames(string &repairShopFilename, string &vFilename, string &cFilename, string &eFilename) {
     string returnString;
     while (!readString("Please insert the Auto Repair Shop File name: ", returnString)) {
@@ -68,6 +83,9 @@ void getFilenames(string &repairShopFilename, string &vFilename, string &cFilena
     eFilename = returnString;
 }
 
+/**
+ * @brief asks for user input to create and return a client
+ */
 Client askForClientInput() {
     string returnString = "";
     while (!readString("Please insert the client name: ", returnString)) {
@@ -76,6 +94,9 @@ Client askForClientInput() {
     return Client(returnString);
 }
 
+/**
+ * @brief asks for user input to create and return an employee
+ */
 Employee askForEmployeeInput() {
     string returnString = "";
     while (!readString("Please insert the employee name: ", returnString)) {
@@ -84,6 +105,10 @@ Employee askForEmployeeInput() {
     return Employee(returnString);
 }
 
+/**
+ * @brief asks for a license plate and returns the corresponding vehicle on returnVehicle (if it exists)
+ * @returns false if the vehicle doesn't exist
+ */
 bool askForVehicleLicensePlate(AutoRepairShop &repairShop, Vehicle *&returnVehicle) {
     string returnString;
     while (true) {
@@ -108,6 +133,9 @@ bool askForVehicleLicensePlate(AutoRepairShop &repairShop, Vehicle *&returnVehic
     }
 }
 
+/**
+ * @brief asks for user input to create and return a vehicle
+ */
 Vehicle *askForVehicleInput() {
     string returnString = "", manufacturer, model, licensePlate;
     int typeOfVehicle;
@@ -177,6 +205,9 @@ Vehicle *askForVehicleInput() {
     return returnVehicle;
 }
 
+/**
+ * @brief asks for user input to create and return a service
+ */
 Service *askForServiceInput() {
     string returnString = "";
     int typeOfService;
@@ -238,6 +269,9 @@ Service *askForServiceInput() {
     return returnService;
 }
 
+/**
+ * @brief asks user for filename and loads Auto Repair Shop from file
+ */
 AutoRepairShop loadRepairShop() {
     string returnString = "";
     AutoRepairShop repairShop("");
@@ -258,6 +292,10 @@ AutoRepairShop loadRepairShop() {
     return repairShop;
 }
 
+
+/**
+ * @brief adds a vehicle to the Auto Repair Shop (and its dependencies - Employee and Client, if needed)
+ */
 void addVehicle(AutoRepairShop &repairShop) {
     if (repairShop.getEmployees().size() == 0) {
         cout << "You need an employee to be responsible for this vehicle! " << endl;
@@ -283,6 +321,9 @@ void addVehicle(AutoRepairShop &repairShop) {
         cout << "That vehicle already exists!" << endl;
 }
 
+/**
+ * @brief displays main menu
+ */
 void displayMainMenu() {
     cout << "Main Menu" << endl;
     cout << "Please make your selection" << endl;
@@ -291,6 +332,9 @@ void displayMainMenu() {
     cout << "3 - Exit" << endl;
 };
 
+/**
+ * @brief displays Auto Repair Shop menu (after load)
+ */
 void displayShopMenu() {
     cout << "Auto Repair Shop Menu" << endl;
     cout << "Please make your selection" << endl;
@@ -299,6 +343,9 @@ void displayShopMenu() {
     cout << "3 - Exit" << endl;
 }
 
+/**
+ * @brief displays View Info menu
+ */
 void displayViewInfoMenu() {
     cout << "Auto Repair Shop Menu" << endl;
     cout << "Please make your selection" << endl;
@@ -314,6 +361,9 @@ void displayViewInfoMenu() {
     cout << "10 - Back" << endl;
 }
 
+/**
+ * @brief displays Update menu
+ */
 void displayUpdateMenu() {
     cout << "Auto Repair Shop Menu" << endl;
     cout << "Please make your selection" << endl;
@@ -329,6 +379,9 @@ void displayUpdateMenu() {
 
 }
 
+/**
+ * @brief deals with user choices on View Info menu
+ */
 void goToViewInfoMenu(AutoRepairShop &repairShop) {
     int menuInput;
     displayViewInfoMenu();
@@ -413,6 +466,9 @@ void goToViewInfoMenu(AutoRepairShop &repairShop) {
     }
 }
 
+/**
+ * @brief deals with user choices on Update menu
+ */
 void goToUpdateMenu(AutoRepairShop &repairShop) {
     int menuInput;
     displayUpdateMenu();
@@ -520,6 +576,9 @@ void goToUpdateMenu(AutoRepairShop &repairShop) {
     }
 }
 
+/**
+ * @brief saves data to files
+ */
 bool saveData(AutoRepairShop &repairShop) {
     string returnString, repairShopFilename, vFilename, cFilename, eFilename;
     int choice = 0;

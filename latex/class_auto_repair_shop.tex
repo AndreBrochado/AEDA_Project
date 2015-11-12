@@ -1,0 +1,268 @@
+\hypertarget{class_auto_repair_shop}{}\section{Auto\+Repair\+Shop Class Reference}
+\label{class_auto_repair_shop}\index{Auto\+Repair\+Shop@{Auto\+Repair\+Shop}}
+
+
+main class of the project, contains info of all vehicles, employees and clients on it  
+
+
+
+
+{\ttfamily \#include $<$Auto\+Repair\+Shop.\+h$>$}
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{class_auto_repair_shop_1_1_inexistent_vehicle}{Inexistent\+Vehicle}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_auto_repair_shop_abfd899870a9e0840ce888f8cfad6cb4c}{}\hyperlink{class_auto_repair_shop_abfd899870a9e0840ce888f8cfad6cb4c}{Auto\+Repair\+Shop} (string name)\label{class_auto_repair_shop_abfd899870a9e0840ce888f8cfad6cb4c}
+
+\begin{DoxyCompactList}\small\item\em creates an object of \hyperlink{class_auto_repair_shop}{Auto\+Repair\+Shop} class \end{DoxyCompactList}\item 
+bool \hyperlink{class_auto_repair_shop_a51b51e852827d936df828b34abc19eaf}{is\+Client} (\hyperlink{class_client}{Client} client1)
+\item 
+bool \hyperlink{class_auto_repair_shop_a9d1534c8de54c5a34958e04222c4a93b}{is\+Employee} (\hyperlink{class_employee}{Employee} employee1)
+\item 
+bool \hyperlink{class_auto_repair_shop_ab7141a5910487566c637497dcef4c26c}{add\+Client} (\hyperlink{class_client}{Client} client)
+\begin{DoxyCompactList}\small\item\em adds client to the clients vector if he wasn\textquotesingle{}t there \end{DoxyCompactList}\item 
+bool \hyperlink{class_auto_repair_shop_a8e5171bd079137114eba615753a07a82}{add\+Employee} (\hyperlink{class_employee}{Employee} employee)
+\begin{DoxyCompactList}\small\item\em adds employee to the employees vector if he wasn\textquotesingle{}t there \end{DoxyCompactList}\item 
+bool \hyperlink{class_auto_repair_shop_a9259c08b180733698c8f2e16b38c8d08}{add\+Vehicle} (\hyperlink{class_vehicle}{Vehicle} $\ast$vehicle)
+\begin{DoxyCompactList}\small\item\em adds vehicle to the vehicles vector if it wasn\textquotesingle{}t there \end{DoxyCompactList}\item 
+bool \hyperlink{class_auto_repair_shop_a0633fa187ade7238e569234befcc8d06}{add\+Vehicle\+To\+Client} (\hyperlink{class_vehicle}{Vehicle} $\ast$vehicle, int client\+Index)
+\begin{DoxyCompactList}\small\item\em adds vehicle to the vehicles vector of a client on the clients vector if it wasn\textquotesingle{}t there \end{DoxyCompactList}\item 
+\hyperlink{class_vehicle}{Vehicle} $\ast$ \hyperlink{class_auto_repair_shop_afe7e5e9fdfb2c2e1e672eec1702999f4}{vehicle\+With\+License\+Plate} (string license\+Plate)
+\item 
+bool \hyperlink{class_auto_repair_shop_ae82d112d03fae24cc106107aa427d375}{assign\+Employee} (\hyperlink{class_vehicle}{Vehicle} $\ast$vehicle)
+\begin{DoxyCompactList}\small\item\em assigns a vehicle to an employee, keeping the vehicle destribution even \end{DoxyCompactList}\item 
+bool \hyperlink{class_auto_repair_shop_a9a812735dd0b3ed15ac8da11809df10e}{remove\+Vehicle} (\hyperlink{class_vehicle}{Vehicle} $\ast$vehicle)
+\begin{DoxyCompactList}\small\item\em removes a vehicle from the Auto Repair Shop (and from its\textquotesingle{} \hyperlink{class_client}{Client} owner and assigned \hyperlink{class_employee}{Employee}) \end{DoxyCompactList}\item 
+bool \hyperlink{class_auto_repair_shop_ae823d84e1a9fe5bd91aefd574ff25a2e}{remove\+Employee} (\hyperlink{class_employee}{Employee} employee)
+\begin{DoxyCompactList}\small\item\em removes an employee from the Auto Repair Shop (assigns the employees\textquotesingle{} vehicles to others if possible) \end{DoxyCompactList}\item 
+bool \hyperlink{class_auto_repair_shop_a765b9c28359faeb3dec782e6347c36ec}{remove\+Client} (\hyperlink{class_client}{Client} client)
+\begin{DoxyCompactList}\small\item\em removes a client and his vehicles from the Auto Repair Shop \end{DoxyCompactList}\item 
+const string \& \hyperlink{class_auto_repair_shop_a5a7ae16e42c357dc05abfc14bedb8601}{get\+Name} () const 
+\item 
+\hypertarget{class_auto_repair_shop_a33a1e27984e3af3d2ff110348d53e1b6}{}void \hyperlink{class_auto_repair_shop_a33a1e27984e3af3d2ff110348d53e1b6}{print\+Vehicles\+Info} () const \label{class_auto_repair_shop_a33a1e27984e3af3d2ff110348d53e1b6}
+
+\begin{DoxyCompactList}\small\item\em prints all vehicles info to std\+::cout \end{DoxyCompactList}\item 
+\hypertarget{class_auto_repair_shop_a4b58d4ec794efc662bb386b8290e5fc0}{}void \hyperlink{class_auto_repair_shop_a4b58d4ec794efc662bb386b8290e5fc0}{print\+Employees\+Info} () const \label{class_auto_repair_shop_a4b58d4ec794efc662bb386b8290e5fc0}
+
+\begin{DoxyCompactList}\small\item\em prints all employees info to std\+::cout \end{DoxyCompactList}\item 
+\hypertarget{class_auto_repair_shop_a9a783b43f65c9607fafad8483a27a2f0}{}void \hyperlink{class_auto_repair_shop_a9a783b43f65c9607fafad8483a27a2f0}{print\+Clients\+Info} () const \label{class_auto_repair_shop_a9a783b43f65c9607fafad8483a27a2f0}
+
+\begin{DoxyCompactList}\small\item\em prints all clients info to std\+::cout \end{DoxyCompactList}\item 
+\hypertarget{class_auto_repair_shop_a847c5195a614319d6ffead105b3d3460}{}void \hyperlink{class_auto_repair_shop_a847c5195a614319d6ffead105b3d3460}{print\+Services} () const \label{class_auto_repair_shop_a847c5195a614319d6ffead105b3d3460}
+
+\begin{DoxyCompactList}\small\item\em prints all services info to std\+::cout \end{DoxyCompactList}\item 
+\hypertarget{class_auto_repair_shop_a401d7e7c76e91072b93aad5a8d12ee11}{}void \hyperlink{class_auto_repair_shop_a401d7e7c76e91072b93aad5a8d12ee11}{print\+Clients\+With\+First\+Letter} (char first\+Letter) const \label{class_auto_repair_shop_a401d7e7c76e91072b93aad5a8d12ee11}
+
+\begin{DoxyCompactList}\small\item\em prints info of clients whose name start with first\+Letter \end{DoxyCompactList}\item 
+\hypertarget{class_auto_repair_shop_a69c89ed9eeb98e07ccd8a4771e34c33f}{}void \hyperlink{class_auto_repair_shop_a69c89ed9eeb98e07ccd8a4771e34c33f}{print\+Employees\+With\+First\+Letter} (char first\+Letter) const \label{class_auto_repair_shop_a69c89ed9eeb98e07ccd8a4771e34c33f}
+
+\begin{DoxyCompactList}\small\item\em prints info of employees whose name start with first\+Letter \end{DoxyCompactList}\item 
+\hypertarget{class_auto_repair_shop_ac46740c130f10912642ca4f227ab2a64}{}void \hyperlink{class_auto_repair_shop_ac46740c130f10912642ca4f227ab2a64}{print\+All\+Info} () const \label{class_auto_repair_shop_ac46740c130f10912642ca4f227ab2a64}
+
+\begin{DoxyCompactList}\small\item\em prints all info present on the Auto Repair Shop Doesn\textquotesingle{}t print the vehicles vector because it would just be duplicated info after clients and employees \end{DoxyCompactList}\item 
+const vector$<$ \hyperlink{class_vehicle}{Vehicle} $\ast$ $>$ \& \hyperlink{class_auto_repair_shop_a46d0afd59aa4b7c404e7c771215fcf27}{get\+Vehicles} () const 
+\item 
+const vector$<$ \hyperlink{class_employee}{Employee} $>$ \& \hyperlink{class_auto_repair_shop_adbb67fa38c0a11263a2b4c8fab54272a}{get\+Employees} () const 
+\item 
+const vector$<$ \hyperlink{class_client}{Client} $>$ \& \hyperlink{class_auto_repair_shop_a6108f87a60ef7d7a7f58924f6a83e294}{get\+Clients} () const 
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+main class of the project, contains info of all vehicles, employees and clients on it 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_auto_repair_shop_ab7141a5910487566c637497dcef4c26c}{}\index{Auto\+Repair\+Shop@{Auto\+Repair\+Shop}!add\+Client@{add\+Client}}
+\index{add\+Client@{add\+Client}!Auto\+Repair\+Shop@{Auto\+Repair\+Shop}}
+\subsubsection[{add\+Client(\+Client client)}]{\setlength{\rightskip}{0pt plus 5cm}bool Auto\+Repair\+Shop\+::add\+Client (
+\begin{DoxyParamCaption}
+\item[{{\bf Client}}]{client}
+\end{DoxyParamCaption}
+)}\label{class_auto_repair_shop_ab7141a5910487566c637497dcef4c26c}
+
+
+adds client to the clients vector if he wasn\textquotesingle{}t there 
+
+\begin{DoxyReturn}{Returns}
+true if it adds the client to the vector, false otherwise 
+\end{DoxyReturn}
+\hypertarget{class_auto_repair_shop_a8e5171bd079137114eba615753a07a82}{}\index{Auto\+Repair\+Shop@{Auto\+Repair\+Shop}!add\+Employee@{add\+Employee}}
+\index{add\+Employee@{add\+Employee}!Auto\+Repair\+Shop@{Auto\+Repair\+Shop}}
+\subsubsection[{add\+Employee(\+Employee employee)}]{\setlength{\rightskip}{0pt plus 5cm}bool Auto\+Repair\+Shop\+::add\+Employee (
+\begin{DoxyParamCaption}
+\item[{{\bf Employee}}]{employee}
+\end{DoxyParamCaption}
+)}\label{class_auto_repair_shop_a8e5171bd079137114eba615753a07a82}
+
+
+adds employee to the employees vector if he wasn\textquotesingle{}t there 
+
+\begin{DoxyReturn}{Returns}
+true if it adds the employee to the vector, false otherwise 
+\end{DoxyReturn}
+\hypertarget{class_auto_repair_shop_a9259c08b180733698c8f2e16b38c8d08}{}\index{Auto\+Repair\+Shop@{Auto\+Repair\+Shop}!add\+Vehicle@{add\+Vehicle}}
+\index{add\+Vehicle@{add\+Vehicle}!Auto\+Repair\+Shop@{Auto\+Repair\+Shop}}
+\subsubsection[{add\+Vehicle(\+Vehicle $\ast$vehicle)}]{\setlength{\rightskip}{0pt plus 5cm}bool Auto\+Repair\+Shop\+::add\+Vehicle (
+\begin{DoxyParamCaption}
+\item[{{\bf Vehicle} $\ast$}]{vehicle}
+\end{DoxyParamCaption}
+)}\label{class_auto_repair_shop_a9259c08b180733698c8f2e16b38c8d08}
+
+
+adds vehicle to the vehicles vector if it wasn\textquotesingle{}t there 
+
+\begin{DoxyReturn}{Returns}
+true if it adds the vehicle to the vector, false otherwise 
+\end{DoxyReturn}
+\hypertarget{class_auto_repair_shop_a0633fa187ade7238e569234befcc8d06}{}\index{Auto\+Repair\+Shop@{Auto\+Repair\+Shop}!add\+Vehicle\+To\+Client@{add\+Vehicle\+To\+Client}}
+\index{add\+Vehicle\+To\+Client@{add\+Vehicle\+To\+Client}!Auto\+Repair\+Shop@{Auto\+Repair\+Shop}}
+\subsubsection[{add\+Vehicle\+To\+Client(\+Vehicle $\ast$vehicle, int client\+Index)}]{\setlength{\rightskip}{0pt plus 5cm}bool Auto\+Repair\+Shop\+::add\+Vehicle\+To\+Client (
+\begin{DoxyParamCaption}
+\item[{{\bf Vehicle} $\ast$}]{vehicle, }
+\item[{int}]{client\+Index}
+\end{DoxyParamCaption}
+)}\label{class_auto_repair_shop_a0633fa187ade7238e569234befcc8d06}
+
+
+adds vehicle to the vehicles vector of a client on the clients vector if it wasn\textquotesingle{}t there 
+
+\begin{DoxyReturn}{Returns}
+true if it adds the vehicle to the vector, false otherwise 
+\end{DoxyReturn}
+\hypertarget{class_auto_repair_shop_ae82d112d03fae24cc106107aa427d375}{}\index{Auto\+Repair\+Shop@{Auto\+Repair\+Shop}!assign\+Employee@{assign\+Employee}}
+\index{assign\+Employee@{assign\+Employee}!Auto\+Repair\+Shop@{Auto\+Repair\+Shop}}
+\subsubsection[{assign\+Employee(\+Vehicle $\ast$vehicle)}]{\setlength{\rightskip}{0pt plus 5cm}bool Auto\+Repair\+Shop\+::assign\+Employee (
+\begin{DoxyParamCaption}
+\item[{{\bf Vehicle} $\ast$}]{vehicle}
+\end{DoxyParamCaption}
+)}\label{class_auto_repair_shop_ae82d112d03fae24cc106107aa427d375}
+
+
+assigns a vehicle to an employee, keeping the vehicle destribution even 
+
+\begin{DoxyReturn}{Returns}
+false if there are no employees 
+\end{DoxyReturn}
+\hypertarget{class_auto_repair_shop_a6108f87a60ef7d7a7f58924f6a83e294}{}\index{Auto\+Repair\+Shop@{Auto\+Repair\+Shop}!get\+Clients@{get\+Clients}}
+\index{get\+Clients@{get\+Clients}!Auto\+Repair\+Shop@{Auto\+Repair\+Shop}}
+\subsubsection[{get\+Clients() const }]{\setlength{\rightskip}{0pt plus 5cm}const vector$<${\bf Client}$>$\& Auto\+Repair\+Shop\+::get\+Clients (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\label{class_auto_repair_shop_a6108f87a60ef7d7a7f58924f6a83e294}
+\begin{DoxyReturn}{Returns}
+the clients vector 
+\end{DoxyReturn}
+\hypertarget{class_auto_repair_shop_adbb67fa38c0a11263a2b4c8fab54272a}{}\index{Auto\+Repair\+Shop@{Auto\+Repair\+Shop}!get\+Employees@{get\+Employees}}
+\index{get\+Employees@{get\+Employees}!Auto\+Repair\+Shop@{Auto\+Repair\+Shop}}
+\subsubsection[{get\+Employees() const }]{\setlength{\rightskip}{0pt plus 5cm}const vector$<${\bf Employee}$>$\& Auto\+Repair\+Shop\+::get\+Employees (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\label{class_auto_repair_shop_adbb67fa38c0a11263a2b4c8fab54272a}
+\begin{DoxyReturn}{Returns}
+the employees vector 
+\end{DoxyReturn}
+\hypertarget{class_auto_repair_shop_a5a7ae16e42c357dc05abfc14bedb8601}{}\index{Auto\+Repair\+Shop@{Auto\+Repair\+Shop}!get\+Name@{get\+Name}}
+\index{get\+Name@{get\+Name}!Auto\+Repair\+Shop@{Auto\+Repair\+Shop}}
+\subsubsection[{get\+Name() const }]{\setlength{\rightskip}{0pt plus 5cm}const string \& Auto\+Repair\+Shop\+::get\+Name (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}\label{class_auto_repair_shop_a5a7ae16e42c357dc05abfc14bedb8601}
+\begin{DoxyReturn}{Returns}
+Auto Repair Shop name 
+\end{DoxyReturn}
+\hypertarget{class_auto_repair_shop_a46d0afd59aa4b7c404e7c771215fcf27}{}\index{Auto\+Repair\+Shop@{Auto\+Repair\+Shop}!get\+Vehicles@{get\+Vehicles}}
+\index{get\+Vehicles@{get\+Vehicles}!Auto\+Repair\+Shop@{Auto\+Repair\+Shop}}
+\subsubsection[{get\+Vehicles() const }]{\setlength{\rightskip}{0pt plus 5cm}const vector$<${\bf Vehicle} $\ast$$>$\& Auto\+Repair\+Shop\+::get\+Vehicles (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\label{class_auto_repair_shop_a46d0afd59aa4b7c404e7c771215fcf27}
+\begin{DoxyReturn}{Returns}
+the vehicles vector 
+\end{DoxyReturn}
+\hypertarget{class_auto_repair_shop_a51b51e852827d936df828b34abc19eaf}{}\index{Auto\+Repair\+Shop@{Auto\+Repair\+Shop}!is\+Client@{is\+Client}}
+\index{is\+Client@{is\+Client}!Auto\+Repair\+Shop@{Auto\+Repair\+Shop}}
+\subsubsection[{is\+Client(\+Client client1)}]{\setlength{\rightskip}{0pt plus 5cm}bool Auto\+Repair\+Shop\+::is\+Client (
+\begin{DoxyParamCaption}
+\item[{{\bf Client}}]{client1}
+\end{DoxyParamCaption}
+)}\label{class_auto_repair_shop_a51b51e852827d936df828b34abc19eaf}
+\begin{DoxyReturn}{Returns}
+true if client1 is on the clients vector, false otherwise 
+\end{DoxyReturn}
+\hypertarget{class_auto_repair_shop_a9d1534c8de54c5a34958e04222c4a93b}{}\index{Auto\+Repair\+Shop@{Auto\+Repair\+Shop}!is\+Employee@{is\+Employee}}
+\index{is\+Employee@{is\+Employee}!Auto\+Repair\+Shop@{Auto\+Repair\+Shop}}
+\subsubsection[{is\+Employee(\+Employee employee1)}]{\setlength{\rightskip}{0pt plus 5cm}bool Auto\+Repair\+Shop\+::is\+Employee (
+\begin{DoxyParamCaption}
+\item[{{\bf Employee}}]{employee1}
+\end{DoxyParamCaption}
+)}\label{class_auto_repair_shop_a9d1534c8de54c5a34958e04222c4a93b}
+\begin{DoxyReturn}{Returns}
+true if employee1 is on the employees vector, false otherwise 
+\end{DoxyReturn}
+\hypertarget{class_auto_repair_shop_a765b9c28359faeb3dec782e6347c36ec}{}\index{Auto\+Repair\+Shop@{Auto\+Repair\+Shop}!remove\+Client@{remove\+Client}}
+\index{remove\+Client@{remove\+Client}!Auto\+Repair\+Shop@{Auto\+Repair\+Shop}}
+\subsubsection[{remove\+Client(\+Client client)}]{\setlength{\rightskip}{0pt plus 5cm}bool Auto\+Repair\+Shop\+::remove\+Client (
+\begin{DoxyParamCaption}
+\item[{{\bf Client}}]{client}
+\end{DoxyParamCaption}
+)}\label{class_auto_repair_shop_a765b9c28359faeb3dec782e6347c36ec}
+
+
+removes a client and his vehicles from the Auto Repair Shop 
+
+\begin{DoxyReturn}{Returns}
+false if the client doesn\textquotesingle{}t exist on the Auto Repair Shop 
+\end{DoxyReturn}
+\hypertarget{class_auto_repair_shop_ae823d84e1a9fe5bd91aefd574ff25a2e}{}\index{Auto\+Repair\+Shop@{Auto\+Repair\+Shop}!remove\+Employee@{remove\+Employee}}
+\index{remove\+Employee@{remove\+Employee}!Auto\+Repair\+Shop@{Auto\+Repair\+Shop}}
+\subsubsection[{remove\+Employee(\+Employee employee)}]{\setlength{\rightskip}{0pt plus 5cm}bool Auto\+Repair\+Shop\+::remove\+Employee (
+\begin{DoxyParamCaption}
+\item[{{\bf Employee}}]{employee}
+\end{DoxyParamCaption}
+)}\label{class_auto_repair_shop_ae823d84e1a9fe5bd91aefd574ff25a2e}
+
+
+removes an employee from the Auto Repair Shop (assigns the employees\textquotesingle{} vehicles to others if possible) 
+
+\begin{DoxyReturn}{Returns}
+false if the employee doesn\textquotesingle{}t exist on the Auto Repair Shop 
+\end{DoxyReturn}
+\hypertarget{class_auto_repair_shop_a9a812735dd0b3ed15ac8da11809df10e}{}\index{Auto\+Repair\+Shop@{Auto\+Repair\+Shop}!remove\+Vehicle@{remove\+Vehicle}}
+\index{remove\+Vehicle@{remove\+Vehicle}!Auto\+Repair\+Shop@{Auto\+Repair\+Shop}}
+\subsubsection[{remove\+Vehicle(\+Vehicle $\ast$vehicle)}]{\setlength{\rightskip}{0pt plus 5cm}bool Auto\+Repair\+Shop\+::remove\+Vehicle (
+\begin{DoxyParamCaption}
+\item[{{\bf Vehicle} $\ast$}]{vehicle}
+\end{DoxyParamCaption}
+)}\label{class_auto_repair_shop_a9a812735dd0b3ed15ac8da11809df10e}
+
+
+removes a vehicle from the Auto Repair Shop (and from its\textquotesingle{} \hyperlink{class_client}{Client} owner and assigned \hyperlink{class_employee}{Employee}) 
+
+\begin{DoxyReturn}{Returns}
+false if the vehicle doesn\textquotesingle{}t exist on the Auto Repair Shop 
+\end{DoxyReturn}
+\hypertarget{class_auto_repair_shop_afe7e5e9fdfb2c2e1e672eec1702999f4}{}\index{Auto\+Repair\+Shop@{Auto\+Repair\+Shop}!vehicle\+With\+License\+Plate@{vehicle\+With\+License\+Plate}}
+\index{vehicle\+With\+License\+Plate@{vehicle\+With\+License\+Plate}!Auto\+Repair\+Shop@{Auto\+Repair\+Shop}}
+\subsubsection[{vehicle\+With\+License\+Plate(string license\+Plate)}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Vehicle} $\ast$ Auto\+Repair\+Shop\+::vehicle\+With\+License\+Plate (
+\begin{DoxyParamCaption}
+\item[{string}]{license\+Plate}
+\end{DoxyParamCaption}
+)}\label{class_auto_repair_shop_afe7e5e9fdfb2c2e1e672eec1702999f4}
+\begin{DoxyReturn}{Returns}
+the vehicle with the given license plate 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Auto\+Repair\+Shop.\+h\item 
+Auto\+Repair\+Shop.\+cpp\end{DoxyCompactItemize}

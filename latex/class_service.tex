@@ -1,0 +1,71 @@
+\hypertarget{class_service}{}\section{Service Class Reference}
+\label{class_service}\index{Service@{Service}}
+
+
+superclass to \hyperlink{class_standard_service}{Standard\+Service} and \hyperlink{class_non_standard_service}{Non\+Standard\+Service}  
+
+
+
+
+{\ttfamily \#include $<$Service.\+h$>$}
+
+Inheritance diagram for Service\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_service}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_service_a70b17e468ca513b3d379b81349614594}{}{\bfseries Service} (\hyperlink{struct_date}{Date} starting\+Date)\label{class_service_a70b17e468ca513b3d379b81349614594}
+
+\item 
+\hypertarget{class_service_ada80b8d4356fb275d1b45777b08f2d00}{}{\bfseries Service} (istream \&in)\label{class_service_ada80b8d4356fb275d1b45777b08f2d00}
+
+\item 
+\hypertarget{class_service_a55a7bfff43a2cf1fad22749475be2bc4}{}virtual int {\bfseries class\+Identifier} ()\label{class_service_a55a7bfff43a2cf1fad22749475be2bc4}
+
+\item 
+\hypertarget{class_service_a3f7311721c3bced9b3effec67ac50319}{}virtual void {\bfseries save\+Object\+Info} (ostream \&out)\label{class_service_a3f7311721c3bced9b3effec67ac50319}
+
+\item 
+\hypertarget{class_service_ac89fe4d9ab6fcf8e42e85e5f4d6f9fb9}{}void {\bfseries print\+Object\+Info} ()\label{class_service_ac89fe4d9ab6fcf8e42e85e5f4d6f9fb9}
+
+\item 
+\hypertarget{class_service_a054bc119ce47bf2ca559f14bbdfe1ee4}{}virtual float {\bfseries get\+Price} () const  =0\label{class_service_a054bc119ce47bf2ca559f14bbdfe1ee4}
+
+\item 
+\hypertarget{class_service_a31d668e91f3b357f892bfb8a50840fdb}{}virtual int {\bfseries get\+Duration} () const  =0\label{class_service_a31d668e91f3b357f892bfb8a50840fdb}
+
+\item 
+\hypertarget{class_service_a666263257ab2bdbd270fbeb34f1edbd3}{}virtual const string \& {\bfseries get\+Description} () const  =0\label{class_service_a666263257ab2bdbd270fbeb34f1edbd3}
+
+\item 
+\hypertarget{class_service_a6977a78bac9e8007b24baec0ff3ce01e}{}\hyperlink{struct_date}{Date} {\bfseries get\+Starting\+Date} () const \label{class_service_a6977a78bac9e8007b24baec0ff3ce01e}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_service_a412240629a97315e5005770c0c965d6d}{}string {\bfseries description}\label{class_service_a412240629a97315e5005770c0c965d6d}
+
+\item 
+\hypertarget{class_service_a7daf7b57889f8147767ed185468ed202}{}float {\bfseries price}\label{class_service_a7daf7b57889f8147767ed185468ed202}
+
+\item 
+\hypertarget{class_service_a7b13f5323bb580051ced9b976c41d3b0}{}\hyperlink{struct_date}{Date} {\bfseries starting\+Date}\label{class_service_a7b13f5323bb580051ced9b976c41d3b0}
+
+\item 
+\hypertarget{class_service_a001abaecc2ecdcd962f5687a025f81da}{}int {\bfseries duration}\label{class_service_a001abaecc2ecdcd962f5687a025f81da}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+superclass to \hyperlink{class_standard_service}{Standard\+Service} and \hyperlink{class_non_standard_service}{Non\+Standard\+Service} 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Service.\+h\item 
+Service.\+cpp\end{DoxyCompactItemize}

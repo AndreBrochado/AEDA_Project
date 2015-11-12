@@ -1,0 +1,121 @@
+\hypertarget{class_person}{}\section{Person Class Reference}
+\label{class_person}\index{Person@{Person}}
+
+
+Superclass to \hyperlink{class_employee}{Employee} and \hyperlink{class_client}{Client}.  
+
+
+
+
+{\ttfamily \#include $<$Auto\+Repair\+Shop.\+h$>$}
+
+Inheritance diagram for Person\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_person}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_person_aba0adcb7be258cfdda603c6261a61985}{}\hyperlink{class_person_aba0adcb7be258cfdda603c6261a61985}{Person} (string name)\label{class_person_aba0adcb7be258cfdda603c6261a61985}
+
+\begin{DoxyCompactList}\small\item\em creates an object of \hyperlink{class_person}{Person} class \end{DoxyCompactList}\item 
+\hyperlink{class_person_a748e7012f90b5d9666687b15a4b5bd7f}{Person} (istream \&in, string name, vector$<$ string $>$ \&license\+Plates)
+\begin{DoxyCompactList}\small\item\em reads an object of \hyperlink{class_person}{Person} class from a stream \end{DoxyCompactList}\item 
+\hypertarget{class_person_aba5495c75e9294a1dcd7a0624d8f7fc2}{}void \hyperlink{class_person_aba5495c75e9294a1dcd7a0624d8f7fc2}{save\+Object\+Info} (ostream \&out)\label{class_person_aba5495c75e9294a1dcd7a0624d8f7fc2}
+
+\begin{DoxyCompactList}\small\item\em saves the objects\textquotesingle{} info to a stream \end{DoxyCompactList}\item 
+\hypertarget{class_person_a7f14c8d2bc2b51b3304085689b021b33}{}virtual void \hyperlink{class_person_a7f14c8d2bc2b51b3304085689b021b33}{print\+Object\+Info} () const \label{class_person_a7f14c8d2bc2b51b3304085689b021b33}
+
+\begin{DoxyCompactList}\small\item\em prints the objects\textquotesingle{} info to std\+::cout \end{DoxyCompactList}\item 
+\hypertarget{class_person_a3776df9441e6a8f7165948d893e2c027}{}bool \hyperlink{class_person_a3776df9441e6a8f7165948d893e2c027}{add\+Vehicle} (\hyperlink{class_vehicle}{Vehicle} $\ast$vehicle)\label{class_person_a3776df9441e6a8f7165948d893e2c027}
+
+\begin{DoxyCompactList}\small\item\em adds a vehicle to the person\textquotesingle{}s vector of vehicles \end{DoxyCompactList}\item 
+\hypertarget{class_person_ae804590441c0a4057c3e4a9912393f12}{}bool \hyperlink{class_person_ae804590441c0a4057c3e4a9912393f12}{remove\+Vehicle} (\hyperlink{class_vehicle}{Vehicle} $\ast$vehicle)\label{class_person_ae804590441c0a4057c3e4a9912393f12}
+
+\begin{DoxyCompactList}\small\item\em removes a vehicle from the person\textquotesingle{}s vector of vehicles \end{DoxyCompactList}\item 
+\hypertarget{class_person_aef412cfd816a9ffc60f6c99a9dc58dc1}{}void \hyperlink{class_person_aef412cfd816a9ffc60f6c99a9dc58dc1}{set\+I\+D} (int id)\label{class_person_aef412cfd816a9ffc60f6c99a9dc58dc1}
+
+\begin{DoxyCompactList}\small\item\em sets the person I\+D to the given value \end{DoxyCompactList}\item 
+int \hyperlink{class_person_a7ed80c648874ad61eb3f482ea50b1f26}{get\+I\+D} () const 
+\item 
+string \hyperlink{class_person_a5c06a41731a2656caec65e3bc39f5ebe}{get\+Name} () const 
+\item 
+vector$<$ \hyperlink{class_vehicle}{Vehicle} $\ast$ $>$ \hyperlink{class_person_abbf0a20a74ada90543dff88e9b0d6064}{get\+Vehicles} () const 
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_person_a669b64897b4d823a27bb5866368d4dfa}{}string {\bfseries name}\label{class_person_a669b64897b4d823a27bb5866368d4dfa}
+
+\item 
+\hypertarget{class_person_a79076878abcbbdf33ff49e2dcb55b043}{}vector$<$ \hyperlink{class_vehicle}{Vehicle} $\ast$ $>$ {\bfseries vehicles}\label{class_person_a79076878abcbbdf33ff49e2dcb55b043}
+
+\item 
+\hypertarget{class_person_aec48a92f614a854ff380a15eb8e2f479}{}int {\bfseries id}\label{class_person_aec48a92f614a854ff380a15eb8e2f479}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Superclass to \hyperlink{class_employee}{Employee} and \hyperlink{class_client}{Client}. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_person_a748e7012f90b5d9666687b15a4b5bd7f}{}\index{Person@{Person}!Person@{Person}}
+\index{Person@{Person}!Person@{Person}}
+\subsubsection[{Person(istream \&in, string name, vector$<$ string $>$ \&license\+Plates)}]{\setlength{\rightskip}{0pt plus 5cm}Person\+::\+Person (
+\begin{DoxyParamCaption}
+\item[{istream \&}]{in, }
+\item[{string}]{name, }
+\item[{vector$<$ string $>$ \&}]{license\+Plates}
+\end{DoxyParamCaption}
+)}\label{class_person_a748e7012f90b5d9666687b15a4b5bd7f}
+
+
+reads an object of \hyperlink{class_person}{Person} class from a stream 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em license\+Plates} & returns the license plates of all vehicles related to \hyperlink{class_person}{Person} \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_person_a7ed80c648874ad61eb3f482ea50b1f26}{}\index{Person@{Person}!get\+I\+D@{get\+I\+D}}
+\index{get\+I\+D@{get\+I\+D}!Person@{Person}}
+\subsubsection[{get\+I\+D() const }]{\setlength{\rightskip}{0pt plus 5cm}int Person\+::get\+I\+D (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\label{class_person_a7ed80c648874ad61eb3f482ea50b1f26}
+\begin{DoxyReturn}{Returns}
+the person\textquotesingle{}s I\+D 
+\end{DoxyReturn}
+\hypertarget{class_person_a5c06a41731a2656caec65e3bc39f5ebe}{}\index{Person@{Person}!get\+Name@{get\+Name}}
+\index{get\+Name@{get\+Name}!Person@{Person}}
+\subsubsection[{get\+Name() const }]{\setlength{\rightskip}{0pt plus 5cm}string Person\+::get\+Name (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\label{class_person_a5c06a41731a2656caec65e3bc39f5ebe}
+\begin{DoxyReturn}{Returns}
+the person\textquotesingle{}s name 
+\end{DoxyReturn}
+\hypertarget{class_person_abbf0a20a74ada90543dff88e9b0d6064}{}\index{Person@{Person}!get\+Vehicles@{get\+Vehicles}}
+\index{get\+Vehicles@{get\+Vehicles}!Person@{Person}}
+\subsubsection[{get\+Vehicles() const }]{\setlength{\rightskip}{0pt plus 5cm}vector$<${\bf Vehicle} $\ast$$>$ Person\+::get\+Vehicles (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\label{class_person_abbf0a20a74ada90543dff88e9b0d6064}
+\begin{DoxyReturn}{Returns}
+the person\textquotesingle{}s vehicle vector 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Auto\+Repair\+Shop.\+h\item 
+Auto\+Repair\+Shop.\+cpp\end{DoxyCompactItemize}
