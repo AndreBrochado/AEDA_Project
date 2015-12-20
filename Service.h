@@ -10,9 +10,12 @@
 using namespace std;
 
 struct Date {
-    int day;
-    int month;
-    int year;
+	int day;
+	int month;
+	int year;
+	int hours;
+	int minutes;
+
 };
 
 /**
