@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 
+#include "BST.h"
 #include "Vehicle.h"
 #include "Utilities.h"
 
@@ -131,8 +132,9 @@ public:
 class AutoRepairShop {
     string name;
     vector<Vehicle *> vehicles;
-    vector<Employee> employees;
-    vector<Client> clients;
+    vector<Employee *> employees;
+    vector<Client *> clients;
+    //BST<Service*> scheduledServices;
 public:
     /**
      * @brief creates an object of AutoRepairShop class
@@ -142,24 +144,24 @@ public:
     /**
      * @returns true if client1 is on the clients vector, false otherwise
      */
-    bool isClient(Client client1);
+    bool isClient(Client *client1);
 
     /**
      * @returns true if employee1 is on the employees vector, false otherwise
      */
-    bool isEmployee(Employee employee1);
+    bool isEmployee(Employee *employee1);
 
     /**
      * @brief adds client to the clients vector if he wasn't there
      * @returns true if it adds the client to the vector, false otherwise
      */
-    bool addClient(Client client);
+    bool addClient(Client *client);
 
     /**
      * @brief adds employee to the employees vector if he wasn't there
      * @returns true if it adds the employee to the vector, false otherwise
      */
-    bool addEmployee(Employee employee);
+    bool addEmployee(Employee *employee);
 
     /**
      * @brief adds vehicle to the vehicles vector if it wasn't there
@@ -174,9 +176,25 @@ public:
     bool addVehicleToClient(Vehicle *vehicle, int clientIndex);
 
     /**
+     * @brief adds a service to the scheduled services Binary Search Tree
+     * @returns
+     */
+    // bool addScheduledService(Service* service, Vehicle* vehicle);
+
+    /**
      * @returns the vehicle with the given license plate
      */
     Vehicle *vehicleWithLicensePlate(string licensePlate);
+
+    /**
+     * @returns a vector of clients with the given name
+     */
+    vector<Client *> clientsWithName(string name);
+
+    /**
+     * @returns a vector of employees with the given name
+     */
+    vector<Employee *> employeesWithName(string name);
 
     /**
      * @brief assigns a vehicle to an employee, keeping the vehicle destribution even
@@ -194,13 +212,13 @@ public:
      * @brief removes an employee from the Auto Repair Shop (assigns the employees' vehicles to others if possible)
      * @returns false if the employee doesn't exist on the Auto Repair Shop
      */
-    bool removeEmployee(Employee employee);
+    bool removeEmployee(Employee *employee);
 
     /**
      * @brief removes a client and his vehicles from the Auto Repair Shop
      * @returns false if the client doesn't exist on the Auto Repair Shop
      */
-    bool removeClient(Client client);
+    bool removeClient(Client *client);
 
     /**
      * @returns Auto Repair Shop name
@@ -251,12 +269,12 @@ public:
     /**
      * @returns the employees vector
      */
-    const vector<Employee> &getEmployees() const { return employees; };
+    const vector<Employee *> &getEmployees() const { return employees; };
 
     /**
      * @returns the clients vector
      */
-    const vector<Client> &getClients() const { return clients; };
+    const vector<Client *> &getClients() const { return clients; };
 
     /**
      * @exception InexistentVehicle exception to throw when vehicleWithLicensePlate() doesn't find any vehicle

@@ -71,7 +71,7 @@ public:
      */
     class EmptyFileException {
     public:
-        EmptyFileException(){};
+        EmptyFileException() { };
     };
 };
 

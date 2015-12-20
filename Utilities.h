@@ -40,9 +40,9 @@ bool readString(const string &prompt, string &returnString);
 ostream &operator<<(ostream &out, Date &d1);
 
 template<class T>
-void writeVector(vector<T> vec, ostream &out) {
+void writeVector(vector<T *> vec, ostream &out) {
     for (size_t i = 0; i < vec.size(); i++) {
-        vec[i].saveObjectInfo(out);
+        vec[i]->saveObjectInfo(out);
         if (i != vec.size() - 1)
             out << endl;
     }

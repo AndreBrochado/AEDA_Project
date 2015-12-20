@@ -18,7 +18,8 @@ void ConfigFile::createFile(string &filename) {
     outputStream.close();
 }
 
-Client ClientsFile::createClientObject(istream &in, string name, vector<string> licensePlates, AutoRepairShop &repairShop) {
+Client ClientsFile::createClientObject(istream &in, string name, vector<string> licensePlates,
+                                       AutoRepairShop &repairShop) {
     Client newClient(in, name, licensePlates);
     for (size_t i = 0; i < licensePlates.size(); i++) {
         newClient.addVehicle(repairShop.vehicleWithLicensePlate(licensePlates[i]));
@@ -26,7 +27,8 @@ Client ClientsFile::createClientObject(istream &in, string name, vector<string> 
     return newClient;
 }
 
-Employee EmployeesFile::createEmployeeObject(istream &in, string name, vector<string> licensePlates, AutoRepairShop &repairShop) {
+Employee EmployeesFile::createEmployeeObject(istream &in, string name, vector<string> licensePlates,
+                                             AutoRepairShop &repairShop) {
     Employee newEmployee(in, name, licensePlates);
     for (size_t i = 0; i < licensePlates.size(); i++) {
         newEmployee.addVehicle(repairShop.vehicleWithLicensePlate(licensePlates[i]));
@@ -119,9 +121,9 @@ bool ClientsFile::loadData(AutoRepairShop &repairShop) {
     if (!existsFile(this->filename))
         return false;
     in.open(this->filename);
-    while(getline(in, name)){
+    while (getline(in, name)) {
         Client c = createClientObject(in, name, licensePlates, repairShop);
-        repairShop.addClient(c);
+        repairShop.addClient(&c);
     }
     return true;
 }
@@ -133,9 +135,9 @@ bool EmployeesFile::loadData(AutoRepairShop &repairShop) {
     if (!existsFile(this->filename))
         return false;
     in.open(this->filename);
-    while(getline(in, name)){
+    while (getline(in, name)) {
         Employee e = createEmployeeObject(in, name, licensePlates, repairShop);
-        repairShop.addEmployee(e);
+        repairShop.addEmployee(&e);
     }
     return true;
 }

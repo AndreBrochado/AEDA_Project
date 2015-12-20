@@ -88,23 +88,23 @@ void getFilenames(string &repairShopFilename, string &vFilename, string &cFilena
 /**
  * @brief asks for user input to create and return a client
  */
-Client askForClientInput() {
+Client *askForClientInput() {
     string returnString = "";
     while (!readString("Please insert the client name: ", returnString)) {
         cout << "Please insert a valid client name" << endl;
     }
-    return Client(returnString);
+    return new Client(returnString);
 }
 
 /**
  * @brief asks for user input to create and return an employee
  */
-Employee askForEmployeeInput() {
+Employee *askForEmployeeInput() {
     string returnString = "";
     while (!readString("Please insert the employee name: ", returnString)) {
         cout << "Please insert a valid employee name" << endl;
     }
-    return Employee(returnString);
+    return new Employee(returnString);
 }
 
 /**
@@ -159,7 +159,8 @@ Vehicle *askForVehicleInput() {
            !isValidLicensePlate(returnString)) {
         cout << "Please insert a valid license plate" << endl;
         cout <<
-        "Note: a valid license plate is of type: XX-XX-XX where only 1 pair of consecutive X's can be letters, the others must be digits" << endl;
+        "Note: a valid license plate is of type: XX-XX-XX where only 1 pair of consecutive X's can be letters, the others must be digits" <<
+        endl;
     }
     licensePlate = returnString;
     Vehicle *returnVehicle;
@@ -301,12 +302,12 @@ AutoRepairShop loadRepairShop() {
 void addVehicle(AutoRepairShop &repairShop) {
     if (repairShop.getEmployees().size() == 0) {
         cout << "You need an employee to be responsible for this vehicle! " << endl;
-        Employee newEmployee = askForEmployeeInput();
+        Employee *newEmployee = askForEmployeeInput();
         repairShop.addEmployee(newEmployee);
     }
     Vehicle *newVehicle = askForVehicleInput();
     cout << "Vehicle owner: " << endl;
-    Client newClient = askForClientInput();
+    Client *newClient = askForClientInput();
     int clientIndex = sequentialSearch(repairShop.getClients(), newClient);
     if (clientIndex == -1) {
         repairShop.addClient(newClient);
@@ -399,13 +400,13 @@ void goToViewInfoMenu(AutoRepairShop &repairShop) {
                 cout << endl;
                 break;
             case 3: {
-                Client client = askForClientInput();
+                Client *client = askForClientInput();
                 int clientIndex = sequentialSearch(repairShop.getClients(), client);
                 if (clientIndex == -1) {
-                    cout << "Client " << client.getName() << " doesn't exist" << endl;
+                    cout << "Client " << client->getName() << " doesn't exist" << endl;
                     break;
                 }
-                repairShop.getClients()[clientIndex].printServices();
+                repairShop.getClients()[clientIndex]->printServices();
                 cout << endl;
                 break;
             }
@@ -478,19 +479,19 @@ void goToUpdateMenu(AutoRepairShop &repairShop) {
     while (menuInput != 9) {
         switch (menuInput) {
             case 1: {
-                Client newClient = askForClientInput();
+                Client *newClient = askForClientInput();
                 if (repairShop.addClient(newClient))
-                    cout << "Client " << newClient.getName() << " added successfully!" << endl;
+                    cout << "Client " << newClient->getName() << " added successfully!" << endl;
                 else
-                    cout << "There's already a client with the name " << newClient.getName() << "!" << endl;
+                    cout << "There's already a client with the name " << newClient->getName() << "!" << endl;
                 break;
             }
             case 2: {
-                Employee newEmployee = askForEmployeeInput();
+                Employee *newEmployee = askForEmployeeInput();
                 if (repairShop.addEmployee(newEmployee))
-                    cout << "Employee " << newEmployee.getName() << " added successfully!" << endl;
+                    cout << "Employee " << newEmployee->getName() << " added successfully!" << endl;
                 else
-                    cout << "There's already an employee with the name " << newEmployee.getName() << "!" << endl;
+                    cout << "There's already an employee with the name " << newEmployee->getName() << "!" << endl;
                 break;
             }
             case 3:
@@ -521,19 +522,57 @@ void goToUpdateMenu(AutoRepairShop &repairShop) {
                 break;
             }
             case 5: {
-                Client toRemoveClient = askForClientInput();
-                if (repairShop.removeClient(toRemoveClient))
-                    cout << "Client " << toRemoveClient.getName() << " removed successfully!" << endl;
+                Client *toRemoveClient = askForClientInput();
+                vector<Client *> clientsWithGivenName = repairShop.clientsWithName(toRemoveClient->getName());
+                if (clientsWithGivenName.size() == 1) {
+                    repairShop.removeClient(clientsWithGivenName[0]);
+                    cout << "Client " << toRemoveClient->getName() << " removed successfully!" << endl;
+                }
+                else if (clientsWithGivenName.size() > 1) {
+                    cout << "There are " << clientsWithGivenName.size() <<
+                    " clients with that name. Which one do you want to remove?";
+                    for (size_t i = 0; i < clientsWithGivenName.size(); i++) {
+                        cout << endl << i + 1 << " - ";
+                        clientsWithGivenName[i]->printObjectInfo();
+                    }
+                    cout << endl << "Or enter " << clientsWithGivenName.size() + 1 << " to back" << endl;
+                    int clientChoice = getMenuInput(clientsWithGivenName.size() + 1);
+                    if (clientChoice == clientsWithGivenName.size() + 1)
+                        break;
+                    else {
+                        repairShop.removeClient(clientsWithGivenName[clientChoice - 1]);
+                        cout << "Client " << toRemoveClient->getName() << " removed successfully!" << endl;
+                    }
+                }
                 else
-                    cout << "Client " << toRemoveClient.getName() << " doesn't exist!" << endl;
+                    cout << "Client " << toRemoveClient->getName() << " doesn't exist!" << endl;
                 break;
             }
             case 6: {
-                Employee toRemoveEmployee = askForEmployeeInput();
-                if (repairShop.removeEmployee(toRemoveEmployee))
-                    cout << "Employee " << toRemoveEmployee.getName() << " removed successfully!" << endl;
+                Employee *toRemoveEmployee = askForEmployeeInput();
+                vector<Employee *> employeesWithGivenName = repairShop.employeesWithName(toRemoveEmployee->getName());
+                if (employeesWithGivenName.size() == 1) {
+                    repairShop.removeEmployee(employeesWithGivenName[0]);
+                    cout << "Employee " << toRemoveEmployee->getName() << " removed successfully!" << endl;
+                }
+                else if (employeesWithGivenName.size() > 1) {
+                    cout << "There are " << employeesWithGivenName.size() <<
+                    " employees with that name. Which one do you want to remove?";
+                    for (size_t i = 0; i < employeesWithGivenName.size(); i++) {
+                        cout << endl << i + 1 << " - ";
+                        employeesWithGivenName[i]->printObjectInfo();
+                    }
+                    cout << endl << "Or enter " << employeesWithGivenName.size() + 1 << " to back" << endl;
+                    int employeeChoice = getMenuInput(employeesWithGivenName.size() + 1);
+                    if (employeeChoice == employeesWithGivenName.size() + 1)
+                        break;
+                    else {
+                        repairShop.removeEmployee(employeesWithGivenName[employeeChoice - 1]);
+                        cout << "Employee " << toRemoveEmployee->getName() << " removed successfully!" << endl;
+                    }
+                }
                 else
-                    cout << "Employee " << toRemoveEmployee.getName() << " doesn't exist!" << endl;
+                    cout << "Employee " << toRemoveEmployee->getName() << " doesn't exist!" << endl;
                 break;
             }
             case 7: {
