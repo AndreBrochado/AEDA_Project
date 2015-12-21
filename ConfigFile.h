@@ -126,7 +126,7 @@ public:
     /**
      * @brief creates and returns a client, adding all vehicles with license plates on the licensePlates vector
      */
-    Client createClientObject(istream &in, string name, vector<string> licensePlates, AutoRepairShop &repairShop);
+    Client createClientObject(istream &in, string name, AutoRepairShop &repairShop);
 
     /**
      * @brief saves the file data
@@ -151,7 +151,7 @@ public:
     /**
      * @brief creates and returns an employee, adding all vehicles with license plates on the licensePlates vector
      */
-    Employee createEmployeeObject(istream &in, string name, vector<string> licensePlates, AutoRepairShop &repairShop);
+    Employee createEmployeeObject(istream &in, string name, AutoRepairShop &repairShop);
 
     /**
      * @brief saves the file data
@@ -163,6 +163,32 @@ public:
      * @returns false if the file doesn't exist
      */
     bool loadData(AutoRepairShop &repairShop);
+};
+
+/**
+ * @class ServicesFile
+ * @brief contains the info of all the Auto Repair Shop's services
+ */
+class ServicesFile : public ConfigFile {
+public:
+    ServicesFile(string &filename) : ConfigFile(filename) { }
+
+    /**
+     * @brief creates and returns a service
+     */
+    Service* createServiceObject(istream &in, AutoRepairShop &repairShop);
+
+    /**
+    * @brief saves the file data
+    */
+    bool saveData(AutoRepairShop &repairShop, bool overwrite = false);
+
+    /**
+    * @brief loads data from the file
+    * @returns false if the file doesn't exist
+    */
+    bool loadData(AutoRepairShop &repairShop);
+
 };
 
 

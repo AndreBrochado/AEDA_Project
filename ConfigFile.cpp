@@ -3,6 +3,7 @@
 //
 
 #include "ConfigFile.h"
+#include "Service.h"
 #include <fstream>
 
 ConfigFile::ConfigFile(string &filename) {
@@ -18,8 +19,9 @@ void ConfigFile::createFile(string &filename) {
     outputStream.close();
 }
 
-Client ClientsFile::createClientObject(istream &in, string name, vector<string> licensePlates,
+Client ClientsFile::createClientObject(istream &in, string name,
                                        AutoRepairShop &repairShop) {
+    vector<string> licensePlates;
     Client newClient(in, name, licensePlates);
     for (size_t i = 0; i < licensePlates.size(); i++) {
         newClient.addVehicle(repairShop.vehicleWithLicensePlate(licensePlates[i]));
@@ -27,13 +29,31 @@ Client ClientsFile::createClientObject(istream &in, string name, vector<string> 
     return newClient;
 }
 
-Employee EmployeesFile::createEmployeeObject(istream &in, string name, vector<string> licensePlates,
+Employee EmployeesFile::createEmployeeObject(istream &in, string name,
                                              AutoRepairShop &repairShop) {
+    vector<string> licensePlates;
     Employee newEmployee(in, name, licensePlates);
     for (size_t i = 0; i < licensePlates.size(); i++) {
         newEmployee.addVehicle(repairShop.vehicleWithLicensePlate(licensePlates[i]));
     }
     return newEmployee;
+}
+
+Service *ServicesFile::createServiceObject(istream &in, AutoRepairShop &repairShop) {
+    int classIdentifier, clientID;
+    string licensePlate;
+    in >> classIdentifier;
+    Service *newService = createService(in, classIdentifier);
+    in >> clientID;
+    getline(in, licensePlate);
+    int clientIndex = 0;
+    for(size_t i = 0; i < repairShop.getClients().size(); i++){
+        if(clientID == repairShop.getClients()[i]->getID())
+            clientIndex = i;
+    }
+    newService->addClient(repairShop.getClients()[clientIndex]);
+    newService->addVehicle(repairShop.vehicleWithLicensePlate(licensePlate));
+    return newService;
 }
 
 bool ConfigFile::existsFile(string &filename) {
@@ -117,12 +137,12 @@ bool VehiclesFile::loadData(AutoRepairShop &repairShop) {
 bool ClientsFile::loadData(AutoRepairShop &repairShop) {
     ifstream in;
     string name;
-    vector<string> licensePlates;
+
     if (!existsFile(this->filename))
         return false;
     in.open(this->filename);
     while (getline(in, name)) {
-        Client c = createClientObject(in, name, licensePlates, repairShop);
+        Client c = createClientObject(in, name, repairShop);
         repairShop.addClient(&c);
     }
     return true;
@@ -131,12 +151,11 @@ bool ClientsFile::loadData(AutoRepairShop &repairShop) {
 bool EmployeesFile::loadData(AutoRepairShop &repairShop) {
     ifstream in;
     string name;
-    vector<string> licensePlates;
     if (!existsFile(this->filename))
         return false;
     in.open(this->filename);
     while (getline(in, name)) {
-        Employee e = createEmployeeObject(in, name, licensePlates, repairShop);
+        Employee e = createEmployeeObject(in, name, repairShop);
         repairShop.addEmployee(&e);
     }
     return true;
@@ -164,3 +183,5 @@ AutoRepairShop AutoRepairShopFile::loadData() {
     ef.loadData(repairShop);
     return repairShop;
 }
+
+

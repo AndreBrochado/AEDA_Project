@@ -14,7 +14,7 @@ int main() {
     menuInput = getMenuInput(3);
     switch (menuInput) {
         case 1:
-            cout<<endl;
+            cout << endl;
             while (!readString("Please insert the Auto Repair Shop name: ", returnString)) {
                 cout << "Please insert a valid name" << endl;
             }
