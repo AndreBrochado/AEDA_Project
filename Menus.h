@@ -1,6 +1,9 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "ConfigFile.h"
+
+#define SERVICE_OFFER 1 //rand()%2
 
 /**
  * @returns true if the string contains only an integer
@@ -65,7 +68,8 @@ int getMenuInput(int numberOfOptions) {
 /**
  * @brief reads filenames to save files
  */
-void getFilenames(string &repairShopFilename, string &vFilename, string &cFilename, string &eFilename) {
+void getFilenames(string &repairShopFilename, string &vFilename, string &cFilename, string &eFilename,
+                  string &sFilename, string &icFilename) {
     string returnString;
     while (!readString("Please insert the Auto Repair Shop File name: ", returnString)) {
         cout << "Please insert a valid file name" << endl;
@@ -83,6 +87,14 @@ void getFilenames(string &repairShopFilename, string &vFilename, string &cFilena
         cout << "Please insert a valid file name" << endl;
     }
     eFilename = returnString;
+    while (!readString("Please insert the Services File name: ", returnString)) {
+        cout << "Please insert a valid file name" << endl;
+    }
+    sFilename = returnString;
+    while (!readString("Please insert the Inactive Clients File name: ", returnString)) {
+        cout << "Please insert a valid file name" << endl;
+    }
+    icFilename = returnString;
 }
 
 /**
@@ -90,10 +102,33 @@ void getFilenames(string &repairShopFilename, string &vFilename, string &cFilena
  */
 Client *askForClientInput() {
     string returnString = "";
+    string name, address, email, phoneNumber;
     while (!readString("Please insert the client name: ", returnString)) {
-        cout << "Please insert a valid client name" << endl;
+        cout << "Please insert a valid name" << endl;
     }
-    return new Client(returnString);
+    name = returnString;
+    while (!readString("Please insert the client address: ", returnString)) {
+        cout << "Please insert a valid address" << endl;
+    }
+    address = returnString;
+    while (!readString("Please insert the client email: ", returnString)) {
+        cout << "Please insert a valid email" << endl;
+    }
+    email = returnString;
+    while (!readString("Please insert the client telephone number: ", returnString)) {
+        cout << "Please insert a valid telephone number" << endl;
+    }
+    phoneNumber = returnString;
+
+    return new Client(name, address, email, phoneNumber);
+}
+
+Client *askForClientName() {
+    string returnString = "";
+    while (!readString("Please insert the client name: ", returnString)) {
+        cout << "Please insert a valid name" << endl;
+    }
+    return new Client(returnString, "", "", "");
 }
 
 /**
@@ -133,6 +168,7 @@ bool askForVehicleLicensePlate(AutoRepairShop &repairShop, Vehicle *&returnVehic
         }
         return false;
     }
+    return false;
 }
 
 /**
@@ -208,37 +244,120 @@ Vehicle *askForVehicleInput() {
     return returnVehicle;
 }
 
-/**
- * @brief asks for user input to create and return a service
- */
-Service *askForServiceInput() {
+void getDate(tm &date) {
     string returnString = "";
+    do {
+        while (!readString("Please insert the starting date year: ", returnString) || !isInt(returnString)) {
+            cout << "Please insert a valid starting date year" << endl;
+        }
+        date.tm_year = atoi(returnString.c_str()) - 1900;
+        while (!readString("Please insert the starting date month: ", returnString) || !isInt(returnString)) {
+            cout << "Please insert a valid starting date month" << endl;
+        }
+        date.tm_mon = atoi(returnString.c_str()) - 1;
+        while (!readString("Please insert the starting date day: ", returnString) || !isInt(returnString)) {
+            cout << "Please insert a valid starting date day" << endl;
+        }
+        date.tm_mday = atoi(returnString.c_str());
+
+        if (!validDay(date.tm_year + 1900, date.tm_mon + 1, date.tm_mday))
+            cout << "Invalid date! Insert a correct one: " << endl;
+
+    } while (!validDay(date.tm_year + 1900, date.tm_mon + 1, date.tm_mday));
+    do {
+        while (!readString("Please insert the starting hour: ", returnString) || !isInt(returnString)) {
+            cout << "Please insert a valid starting hour" << endl;
+        }
+        date.tm_hour = atoi(returnString.c_str());
+        while (!readString("Please insert the starting minute: ", returnString) || !isInt(returnString)) {
+            cout << "Please insert a valid starting minute" << endl;
+        }
+        date.tm_min = atoi(returnString.c_str());
+        if (!validHour(date.tm_hour, date.tm_min))
+            cout << "Invalid hour! Insert a correct one: " << endl;
+    } while (!validHour(date.tm_hour, date.tm_min));
+}
+
+Service *askForServiceTypeAndDate(Client *client, Vehicle *vehicle) {
     int typeOfService;
     Service *returnService;
-    Date startingDate{0};
+    tm startingDate = {0};
+    string returnString = "";
     cout << "Choose a type of service: " << endl;
     cout << "1 - Oil Change" << endl;
     cout << "2 - Inspection" << endl;
     cout << "3 - Car Wash" << endl;
     cout << "4 - Other (Non Standard Service)" << endl;
     typeOfService = getMenuInput(4);
-    while (!validDay(startingDate.year, startingDate.month, startingDate.day)) {
-        while (!readString("Please insert the starting date year: ", returnString) || !isInt(returnString)) {
-            cout << "Please insert a valid starting date year" << endl;
+    do {
+        getDate(startingDate);
+        if (!(startingDate > getToday()))
+            cout << "Please insert a date in the future" << endl;
+    } while (!(startingDate > getToday()));
+    switch (typeOfService) {
+        case 1:
+            returnService = new OilChange(startingDate);
+            break;
+        case 2:
+            returnService = new Inspection(startingDate);
+            break;
+        case 3:
+            returnService = new CarWash(startingDate);
+            break;
+        case 4: {
+            while (!readString("Please insert the service's description: ", returnString)) {
+                cout << "Please insert a valid description" << endl;
+            }
+            string description = returnString;
+            while (!readString("Please insert the service's price: ", returnString) || !isFloat(returnString)) {
+                cout << "Please insert a valid price (integer or float)" << endl;
+            }
+            float price = (float) atof(returnString.c_str());
+            while (!readString("Please insert the service's duration in days: ", returnString) ||
+                   !isInt(returnString)) {
+                cout << "Please insert a valid duration (an integer number of days)" << endl;
+            }
+            int duration = atoi(returnString.c_str());
+            returnService = new NonStandardService(startingDate, description, price, duration);
+            break;
         }
-        startingDate.year = atoi(returnString.c_str());
-        while (!readString("Please insert the starting date month: ", returnString) || !isInt(returnString)) {
-            cout << "Please insert a valid starting date month" << endl;
-        }
-        startingDate.month = atoi(returnString.c_str());
-        while (!readString("Please insert the starting date day: ", returnString) || !isInt(returnString)) {
-            cout << "Please insert a valid starting date day" << endl;
-        }
-        startingDate.day = atoi(returnString.c_str());
-        if (!validDay(startingDate.year, startingDate.month, startingDate.day))
-            cout << "Invalid date! Insert a correct one: " << endl;
+        default:
+            cout << "This isn't supposed to happen, please report the error!" << endl;
     }
-    cout << startingDate.day << "/" << startingDate.month << "/" << startingDate.year << endl;
+    returnService->addClient(client);
+    returnService->addVehicle(vehicle);
+    return returnService;
+}
+
+
+/**
+ * @brief asks for user input to create and return a service
+ */
+Service *askForServiceInput(int isScheduled) {
+    string returnString = "";
+    int typeOfService;
+    Service *returnService;
+    tm startingDate = {0};
+    cout << "Choose a type of service: " << endl;
+    cout << "1 - Oil Change" << endl;
+    cout << "2 - Inspection" << endl;
+    cout << "3 - Car Wash" << endl;
+    cout << "4 - Other (Non Standard Service)" << endl;
+    typeOfService = getMenuInput(4);
+    if (isScheduled) {
+        do {
+            getDate(startingDate);
+            if (!(startingDate > getToday()))
+                cout << "Please insert a date in the future" << endl;
+        } while (!(startingDate > getToday()));
+    }
+    else
+        do {
+            getDate(startingDate);
+            if (!(getToday() > startingDate))
+                cout << "Please insert a date in the past" << endl;
+        } while (!(getToday() > startingDate));
+
     switch (typeOfService) {
         case 1:
             returnService = new OilChange(startingDate);
@@ -295,7 +414,6 @@ AutoRepairShop loadRepairShop() {
     return repairShop;
 }
 
-
 /**
  * @brief adds a vehicle to the Auto Repair Shop (and its dependencies - Employee and Client, if needed)
  */
@@ -307,14 +425,29 @@ void addVehicle(AutoRepairShop &repairShop) {
     }
     Vehicle *newVehicle = askForVehicleInput();
     cout << "Vehicle owner: " << endl;
-    Client *newClient = askForClientInput();
-    int clientIndex = sequentialSearch(repairShop.getClients(), newClient);
-    if (clientIndex == -1) {
-        repairShop.addClient(newClient);
-        clientIndex = repairShop.getClients().size() - 1;
+    Client *newClient = askForClientName();
+    vector<Client *> clientsWithGivenName = repairShop.clientsWithName(newClient->getName());
+    if (clientsWithGivenName.size() == 1)
+        newClient = clientsWithGivenName[0];
+    else if (clientsWithGivenName.size() > 1) {
+        cout << "There are " << clientsWithGivenName.size() <<
+        " clients with that name. Which one owns the vehicle?";
+        for (size_t i = 0; i < clientsWithGivenName.size(); i++) {
+            cout << endl << i + 1 << " - ";
+            clientsWithGivenName[i]->printObjectInfo();
+        }
+        cout << endl << "Or enter " << clientsWithGivenName.size() + 1 << " to back" << endl;
+        int clientChoice = getMenuInput(clientsWithGivenName.size() + 1);
+        if (clientChoice == clientsWithGivenName.size() + 1)
+            return;
+        else
+            newClient = clientsWithGivenName[clientChoice - 1];
     }
+    else
+        repairShop.addClient(newClient);
+
     if (repairShop.addVehicle(newVehicle)) {
-        if (repairShop.addVehicleToClient(newVehicle, clientIndex))
+        if (repairShop.addVehicleToClient(newVehicle, newClient))
             cout << newVehicle->getManufacturer() << " " << newVehicle->getModel() << " with license plate " <<
             newVehicle->getLicensePlate() << " added successfully!" << endl;
         else
@@ -361,7 +494,10 @@ void displayViewInfoMenu() {
     cout << "7 - View Employees Info" << endl;
     cout << "8 - View Clients Info -- Filter by the first letter of the client name" << endl;
     cout << "9 - View Employees Info -- Filter by the first letter of the client name" << endl;
-    cout << "10 - Back" << endl;
+    cout << "10 - View Inactive Clients Info" << endl;
+    cout << "11 - View Scheduled Services (Ordered by decrescent service date)" << endl;
+    cout << "12 - View Inactive Clients with name" << endl;
+    cout << "13 - Back" << endl;
 }
 
 /**
@@ -378,7 +514,10 @@ void displayUpdateMenu() {
     cout << "6 - Remove Employee" << endl;
     cout << "7 - Remove Vehicle" << endl;
     cout << "8 - Remove Service" << endl;
-    cout << "9 - Back" << endl;
+    cout << "9 - Schedule a Service" << endl;
+    cout << "10 - Change a Scheduled Service (change date or/and type of Service)" << endl;
+    cout << "11 - Cancel a Scheduled Service" << endl;
+    cout << "12 - Back" << endl;
 
 }
 
@@ -388,8 +527,8 @@ void displayUpdateMenu() {
 void goToViewInfoMenu(AutoRepairShop &repairShop) {
     int menuInput;
     displayViewInfoMenu();
-    menuInput = getMenuInput(10);
-    while (menuInput != 10) {
+    menuInput = getMenuInput(13);
+    while (menuInput != 13) {
         switch (menuInput) {
             case 1:
                 repairShop.printAllInfo();
@@ -459,13 +598,28 @@ void goToViewInfoMenu(AutoRepairShop &repairShop) {
                 cout << endl;
                 break;
             }
+            case 10: {
+                repairShop.printInactiveClientsInfo();
+                break;
+            }
+            case 11: {
+                repairShop.printScheduledServicesInOrder();
+                break;
+            }
+            case 12: {
+                string returnString = "";
+                while (!readString("Please insert the Inactive Client name: ", returnString)) {
+                    cout << "Please insert a valid name" << endl;
+                }
+                repairShop.printInactiveClientsWithName(returnString);
+            }
             default:
                 cout << "This isn't supposed to happen, please report the error!" << endl;
         }
         cout << "Press any key to continue..." << endl;
         getchar();
         displayViewInfoMenu();
-        menuInput = getMenuInput(10);
+        menuInput = getMenuInput(13);
     }
 }
 
@@ -475,23 +629,19 @@ void goToViewInfoMenu(AutoRepairShop &repairShop) {
 void goToUpdateMenu(AutoRepairShop &repairShop) {
     int menuInput;
     displayUpdateMenu();
-    menuInput = getMenuInput(9);
-    while (menuInput != 9) {
+    menuInput = getMenuInput(12);
+    while (menuInput != 12) {
         switch (menuInput) {
             case 1: {
                 Client *newClient = askForClientInput();
-                if (repairShop.addClient(newClient))
-                    cout << "Client " << newClient->getName() << " added successfully!" << endl;
-                else
-                    cout << "There's already a client with the name " << newClient->getName() << "!" << endl;
+                repairShop.addClient(newClient);
+                cout << "Client " << newClient->getName() << " added successfully!" << endl;
                 break;
             }
             case 2: {
                 Employee *newEmployee = askForEmployeeInput();
-                if (repairShop.addEmployee(newEmployee))
-                    cout << "Employee " << newEmployee->getName() << " added successfully!" << endl;
-                else
-                    cout << "There's already an employee with the name " << newEmployee->getName() << "!" << endl;
+                repairShop.addEmployee(newEmployee);
+                cout << "Employee " << newEmployee->getName() << " added successfully!" << endl;
                 break;
             }
             case 3:
@@ -499,13 +649,12 @@ void goToUpdateMenu(AutoRepairShop &repairShop) {
                 break;
             case 4: {
                 int vehicleIndex;
-                Service *newService = askForServiceInput();
+                Service *newService = askForServiceInput(0);
                 if (repairShop.getVehicles().size() == 0) {
                     cout << "You need a vehicle to add that service!" << endl;
                     addVehicle(repairShop);
                     vehicleIndex = repairShop.getVehicles().size() - 1;
                 }
-
                 else {
                     Vehicle *targetVehicle;
                     cout << "To which vehicle do you want to add the service? " << endl;
@@ -517,12 +666,22 @@ void goToUpdateMenu(AutoRepairShop &repairShop) {
                         break;
                     }
                 }
-                repairShop.getVehicles()[vehicleIndex]->addService(newService);
+                Client* client = repairShop.clientWithVehicle(repairShop.getVehicles()[vehicleIndex]);
+                repairShop.addServiceToVehicle(newService, repairShop.getVehicles()[vehicleIndex]);
+                if (SERVICE_OFFER && repairShop.isTopClient(client) && client->getClientCard()->getPoints() != 0) {
+                    cout << "You are one our best 3 clients! Do you want to trade your points for a free service? (y for yes, any key for no) ";
+                    char c = getchar();
+                    cin.ignore(1000, '\n');
+                    if(c == 'y'){
+                        repairShop.removeClientPoints(client);
+                        cout << "Enjoy your free service!" << endl;
+                    }
+                }
                 cout << "Service " << newService->getDescription() << " added successfully!" << endl;
                 break;
             }
             case 5: {
-                Client *toRemoveClient = askForClientInput();
+                Client *toRemoveClient = askForClientName();
                 vector<Client *> clientsWithGivenName = repairShop.clientsWithName(toRemoveClient->getName());
                 if (clientsWithGivenName.size() == 1) {
                     repairShop.removeClient(clientsWithGivenName[0]);
@@ -569,6 +728,7 @@ void goToUpdateMenu(AutoRepairShop &repairShop) {
                     else {
                         repairShop.removeEmployee(employeesWithGivenName[employeeChoice - 1]);
                         cout << "Employee " << toRemoveEmployee->getName() << " removed successfully!" << endl;
+                        break;
                     }
                 }
                 else
@@ -576,28 +736,28 @@ void goToUpdateMenu(AutoRepairShop &repairShop) {
                 break;
             }
             case 7: {
-                Vehicle *toRemoveVehicle = askForVehicleInput();
-                if (repairShop.removeVehicle(toRemoveVehicle))
+                Vehicle *toRemoveVehicle;
+                if (askForVehicleLicensePlate(repairShop, toRemoveVehicle) && repairShop.removeVehicle(toRemoveVehicle))
                     cout << toRemoveVehicle->getManufacturer() << " " << toRemoveVehicle->getModel() <<
-                    "with license plate " << toRemoveVehicle->getLicensePlate() << " removed successfully!" << endl;
+                    " with license plate " << toRemoveVehicle->getLicensePlate() << " removed successfully!" << endl;
                 else
                     cout << toRemoveVehicle->getManufacturer() << " " << toRemoveVehicle->getModel() <<
                     "with license plate " << toRemoveVehicle->getLicensePlate() << " doesn't exist!" << endl;
                 break;
             }
             case 8: {
-                Service *toRemoveService = askForServiceInput();
+                Service *toRemoveServiceInfo = askForServiceInput(0);
                 Vehicle *toRemoveFromVehicle;
-                int vehicleIndex;
-                cout << "From which vehicle do you want to add the service? " << endl;
+                cout << "From which vehicle do you want to remove the service? " << endl;
                 if (askForVehicleLicensePlate(repairShop, toRemoveFromVehicle)) {
-                    vehicleIndex = sequentialSearch(repairShop.getVehicles(), toRemoveFromVehicle);
-                    if (repairShop.getVehicles()[vehicleIndex]->removeService(toRemoveService)) {
-                        cout << "Service " << toRemoveService->getDescription() << " removed successfully!" << endl;
+                    Service *toRemoveService = repairShop.findService(toRemoveServiceInfo, toRemoveFromVehicle);
+                    if (toRemoveService != NULL && repairShop.removeService(toRemoveService, toRemoveFromVehicle)) {
+                        cout << "Service " << toRemoveServiceInfo->getDescription() << " removed successfully!" << endl;
                         break;
                     }
                     else {
-                        cout << "The " << toRemoveService->getDescription() << " service you provided doesn't exist!" <<
+                        cout << "The " << toRemoveServiceInfo->getDescription() <<
+                        " service you provided doesn't exist!" <<
                         endl;
                         break;
                     }
@@ -607,26 +767,97 @@ void goToUpdateMenu(AutoRepairShop &repairShop) {
                     break;
                 }
             }
+            case 9: {
+                Vehicle *targetVehicle;
+                Service *newScheduledService = askForServiceInput(1);
+                if (repairShop.getVehicles().size() == 0) {
+                    cout << "You need a vehicle to add that service!" << endl;
+                    addVehicle(repairShop);
+                    targetVehicle = repairShop.getVehicles()[0];
+                }
+                else {
+                    cout << "To which vehicle do you want to add the service? " << endl;
+                    if (!askForVehicleLicensePlate(repairShop, targetVehicle)) {
+                        cout << "No service added because you didn't provide a target vehicle" << endl;
+                        break;
+                    }
+                }
+                newScheduledService->addVehicle(targetVehicle);
+                newScheduledService->addClient(repairShop.clientWithVehicle(targetVehicle));
+                repairShop.addScheduledService(newScheduledService);
+                cout << "Service " << newScheduledService->getDescription() << " added successfully!" << endl;
+                break;
+            }
+            case 10: {
+                Service *targetServiceInfo = askForServiceInput(1);
+                Vehicle *targetVehicle;
+                cout << "Which vehicle is associated with the service you wish to change? " << endl;
+                if (askForVehicleLicensePlate(repairShop, targetVehicle)) {
+                    Service *targetService = repairShop.findScheduledService(targetServiceInfo, targetVehicle);
+                    if (targetService == NULL) {
+                        cout << "The " << targetServiceInfo->getDescription() <<
+                        " service you provided doesn't exist!";
+                        break;
+                    }
+                    else {
+                        Client *client = targetService->getClient();
+                        cout << "Choose the Service you want to change to: " << endl;
+                        Service *newService = askForServiceTypeAndDate(client, targetVehicle);
+                        if (repairShop.removeScheduledService(targetService)) {
+                            cout << "Service changed successfully!" << endl;
+                            repairShop.addScheduledService(newService);
+                        }
+                        else
+                            cout << "Error changing service" << endl;
+                    }
+                }
+                else
+                    cout << "No service changed because you didn't provide a target vehicle" << endl;
+                break;
+            }
+            case 11: {
+                Service *targetServiceInfo = askForServiceInput(1);
+                Vehicle *targetVehicle;
+                cout << "Which vehicle is associated with the service you wish to cancel? " << endl;
+                if (askForVehicleLicensePlate(repairShop, targetVehicle)) {
+                    Service *targetService = repairShop.findScheduledService(targetServiceInfo, targetVehicle);
+                    if (targetService == NULL) {
+                        cout << "The " << targetServiceInfo->getDescription() <<
+                        " service you provided doesn't exist!";
+                        break;
+                    }
+                    else {
+                        if (repairShop.removeScheduledService(targetService))
+                            cout << "Service cancelled successfully!" << endl;
+                        else
+                            cout << "Error cancelling service" << endl;
+                    }
+                }
+                else
+                    cout << "No service removed because you didn't provide a target vehicle" << endl;
+                break;
+            }
             default:
                 cout << "This isn't supposed to happen, please report the error!" << endl;
         }
         cout << "Press any key to continue..." << endl;
         getchar();
         displayUpdateMenu();
-        menuInput = getMenuInput(9);
+        menuInput = getMenuInput(12);
     }
+
 }
 
 /**
  * @brief saves data to files
  */
 bool saveData(AutoRepairShop &repairShop) {
-    string returnString, repairShopFilename, vFilename, cFilename, eFilename;
+    string returnString, repairShopFilename, vFilename, cFilename, eFilename, sFilename, icFilename;
     int choice = 0;
     while (choice != 3) {
-        getFilenames(repairShopFilename, vFilename, cFilename, eFilename);
+        getFilenames(repairShopFilename, vFilename, cFilename, eFilename, sFilename, icFilename);
         AutoRepairShopFile repairShopFile(repairShopFilename);
-        if (!repairShopFile.saveData(repairShop, vFilename, cFilename, eFilename)) {
+        if (!repairShopFile.saveData(repairShop, vFilename, cFilename, eFilename, sFilename, icFilename)) {
             cout << "There are existing files with the same name!" << endl << "What do you want to do? " << endl;
             cout << "1 - Overwrite files" << endl;
             cout << "2 - Choose another name for files" << endl;
@@ -634,7 +865,9 @@ bool saveData(AutoRepairShop &repairShop) {
             choice = getMenuInput(3);
             switch (choice) {
                 case 1:
-                    return repairShopFile.saveData(repairShop, vFilename, cFilename, eFilename, true);
+                    return repairShopFile.saveData(repairShop, vFilename, cFilename, eFilename, sFilename,
+                                                   icFilename,
+                                                   true);
                 case 2:
                     choice = 2;
                     break;

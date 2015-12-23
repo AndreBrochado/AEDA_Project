@@ -1,7 +1,3 @@
-//
-// Created by Andre on 17/10/2015.
-//
-
 #include <stdlib.h>
 #include "Vehicle.h"
 #include "ConfigFile.h"
@@ -18,23 +14,12 @@ Vehicle::Vehicle(istream &in) {
     string testString = "";
     int classIdentifier = 0;
     in >> this->manufacturer >> this->model;
-    in >> testString;
-    while (testString.find("-") == string::npos) {
-        classIdentifier = atoi(testString.c_str());
-        this->services.push_back(createServiceObject(in, classIdentifier));
-        testString = "";
-        in >> testString;
-    }
-    this->licensePlate = testString;
+    in >> this->licensePlate;
 }
 
 void Vehicle::saveObjectInfo(ostream &out) {
     out << this->classIdentifier() << endl
     << this->manufacturer << " " << this->model << endl;
-    for (size_t i = 0; i < services.size(); i++) {
-        services[i]->saveObjectInfo(out);
-        out << endl;
-    }
     out << this->licensePlate;
 }
 
@@ -46,7 +31,7 @@ bool Vehicle::removeService(Service *s1) {
     int index = sequentialSearch(services, s1);
     if (index == -1)
         return false;
-    services.erase(services.begin(), services.begin() + index);
+    services.erase(services.begin() + index);
     return true;
 }
 

@@ -1,7 +1,3 @@
-//
-// Created by up201403057 on 24-10-2015.
-//
-
 #ifndef AEDA_PROJECT_UTILITIES_H
 #define AEDA_PROJECT_UTILITIES_H
 
@@ -9,6 +5,12 @@
 #include <vector>
 #include "Service.h"
 #include "AutoRepairShop.h"
+#include "PointCard.h"
+
+#define SECS_PER_MIN 60
+#define MINs_PER_HOUR 60
+#define HOURS_PER_DAY 24
+#define DAYS_PER_YEAR 365
 
 using namespace std;
 
@@ -48,6 +50,28 @@ void writeVector(vector<T *> vec, ostream &out) {
     }
 }
 
+template<class T, class Y>
+void writeUnorderedSet(unordered_set<T *, Y, Y> set, ostream &out){
+    typename unordered_set<T *, Y, Y>::iterator it = set.begin();
+    while(it != set.end()){
+        (*it)->saveObjectInfo(out);
+        it++;
+        if(it != set.end())
+            out<<endl;
+    }
+}
+
+template<class T>
+void writeBST(BST<T *> tree, ostream &out) {
+    BSTItrLevel <T *> it(tree);
+    while (!it.isAtEnd()) {
+        it.retrieve()->saveObjectInfo(out);
+        it.advance();
+        if(!it.isAtEnd())
+            out << endl;
+    }
+}
+
 template<class T>
 int sequentialSearch(const vector<T> &v, T x) {
     for (unsigned int i = 0; i < v.size(); i++)
@@ -78,12 +102,20 @@ void inverseInsertionSort(vector<T> &v) {
     }
 };
 
-long int dateToDayNumber(Date date);
+/*long int dateToDayNumber(Date date);
 
 Date dayNumberToDate(long int g);
 
-Date operator+(Date d, int i);
+Date operator+(Date d, int i);*/
+
+bool operator==(tm d1, tm d2);
+
+bool operator>(tm d1, tm d2);
 
 bool validDay(int year, int month, int day);
+
+bool validHour(int hour, int minute);
+
+tm getToday();
 
 #endif //AEDA_PROJECT_UTILITIES_H

@@ -1,7 +1,3 @@
-//
-// Created by Andre on 17/10/2015.
-//
-
 #ifndef AEDA_PROJECT_VEHICLE_H
 #define AEDA_PROJECT_VEHICLE_H
 
@@ -40,6 +36,8 @@ public:
     const string &getManufacturer() const { return manufacturer; };
 
     const string &getModel() const { return model; };
+
+    const vector<Service *> &getServices() const { return services; };
 };
 
 class Automobile : public Vehicle {

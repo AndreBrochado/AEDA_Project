@@ -3,14 +3,21 @@
 
 #include <iostream>
 #include <vector>
+#include <unordered_set>
 
 #include "BST.h"
 #include "Vehicle.h"
+#include "Service.h"
 #include "Utilities.h"
+#include "PointCard.h"
 
 using namespace std;
 
 class Vehicle;
+
+class Service;
+
+class PointCard;
 
 /**
  *@class Person
@@ -36,7 +43,7 @@ public:
     /**
      * @brief saves the objects' info to a stream
      */
-    void saveObjectInfo(ostream &out);
+    virtual void saveObjectInfo(ostream &out);
 
     /**
      * @brief prints the objects' info to std::cout
@@ -79,19 +86,47 @@ public:
  * @brief subclass of Person, someone with cars on the Auto Repair Shop
  */
 class Client : public Person {
+    PointCard *clientCard;
+    string address, email, phoneNumber;
 public:
     /**
      * @brief creates an object of Client class
      */
-    Client(string name) : Person(name) { };
+    Client(string name, string address, string email, string phoneNumber) : Person(name), address(address), email(email), phoneNumber(phoneNumber) { clientCard = NULL; };
 
     /**
      * @brief reads an object of Client class from a stream
      * @param[out]  licensePlates   returns the license plates of all vehicles owned by Client
      */
-    Client(istream &in, string name, vector<string> &licensePlates) : Person(in, name, licensePlates) { };
+    Client(istream &in, string name, vector<string> &licensePlates);
 
-    /**
+    void saveObjectInfo(ostream &out);
+
+    bool isInactive();
+
+    void createClientCard(tm date, float cost);
+
+    void deleteClientCard();
+
+    void updatePoints(tm data, float cost);
+
+    void removePoints(int numPoints = 0);
+
+    bool checkPointsExpiration();
+
+    int getNumberOfServices();
+
+    tm getLastServiceDate();
+
+    PointCard *getClientCard() const { return clientCard; };
+
+    void setAddress(string address){this->address=address;};
+
+    void setEmail(string email){this->email = email;};
+
+    void setPhoneNumber(string phoneNumber){this->phoneNumber = phoneNumber;};
+
+/**
      * @brief prints the objects' info to std::cout
      */
     void printObjectInfo() const;
@@ -125,16 +160,30 @@ public:
     void printObjectInfo() const;
 };
 
+struct clientHash {
+
+    int operator()(const Client *c1) const {
+        return c1->getID();
+    }
+
+    int operator()(const Client *c1, const Client *c2) const {
+        return c1->getID() == c2->getID();
+    }
+};
+
 /**
  * @class AutoRepairShop
  * @brief main class of the project, contains info of all vehicles, employees and clients on it
  */
 class AutoRepairShop {
+    static int nextClientID;
     string name;
     vector<Vehicle *> vehicles;
     vector<Employee *> employees;
     vector<Client *> clients;
-    //BST<Service*> scheduledServices;
+    BST<Service *> scheduledServices;
+    unordered_set<Client *, clientHash, clientHash> inactiveClients;
+    priority_queue<PointCard> clientCards;
 public:
     /**
      * @brief creates an object of AutoRepairShop class
@@ -173,13 +222,21 @@ public:
      * @brief adds vehicle to the vehicles vector of a client on the clients vector if it wasn't there
      * @returns true if it adds the vehicle to the vector, false otherwise
      */
-    bool addVehicleToClient(Vehicle *vehicle, int clientIndex);
+    bool addVehicleToClient(Vehicle *vehicle, Client *client);
 
-    /**
-     * @brief adds a service to the scheduled services Binary Search Tree
-     * @returns
-     */
-    // bool addScheduledService(Service* service, Vehicle* vehicle);
+    bool addServiceToVehicle(Service *service, Vehicle *vehicle);
+
+    bool isTopClient(Client* client);
+
+    void removeClientCard(PointCard clientCard);
+
+    Client* inactiveClientWithVehicle(Vehicle* vehicle);
+
+    void printInactiveClientsWithName(string name);
+
+    void checkForInactiveClients();
+
+    void removeClientPoints(Client* client);
 
     /**
      * @returns the vehicle with the given license plate
@@ -191,16 +248,38 @@ public:
      */
     vector<Client *> clientsWithName(string name);
 
+    Client *clientWithVehicle(Vehicle *vehicle);
+
+    /**
+     * @returns the clients' vector index of the client with the given ID
+     */
+    Client *clientWithID(int id);
+
     /**
      * @returns a vector of employees with the given name
      */
     vector<Employee *> employeesWithName(string name);
 
     /**
-     * @brief assigns a vehicle to an employee, keeping the vehicle destribution even
+     * @brief assigns a vehicle to an employee, keeping the vehicle distribution even
      * @returns false if there are no employees
      */
     bool assignEmployee(Vehicle *vehicle);
+
+    bool existsScheduledService(Service *service);
+
+    Service* findService(Service *service, Vehicle* vehicle);
+
+    Service* findScheduledService(Service *service, Vehicle* vehicle);
+
+    /**
+     * @brief adds a future service to the scheduled services BST
+     */
+    void addScheduledService(Service *service);
+
+    bool removeScheduledService(Service* service);
+
+    bool removeService(Service* service, Vehicle* vehicle);
 
     /**
      * @brief removes a vehicle from the Auto Repair Shop (and from its' Client owner and assigned Employee)
@@ -240,10 +319,14 @@ public:
      */
     void printClientsInfo() const;
 
+    void printInactiveClientsInfo();
+
     /**
      * @brief prints all services info to std::cout
      */
     void printServices() const;
+
+    void printScheduledServicesInOrder();
 
     /**
      * @brief prints info of clients whose name start with firstLetter
@@ -276,7 +359,15 @@ public:
      */
     const vector<Client *> &getClients() const { return clients; };
 
-    /**
+    const unordered_set<Client *, clientHash, clientHash> &getInactiveClients() const { return inactiveClients;}
+
+    const BST<Service *> &getScheduledServices() const { return scheduledServices; };
+
+    static int getNextClientID() { return nextClientID; };
+
+    static void setNextClientID(int nextClientID) { AutoRepairShop::nextClientID = nextClientID; }
+
+/**
      * @exception InexistentVehicle exception to throw when vehicleWithLicensePlate() doesn't find any vehicle
      */
     class InexistentVehicle {

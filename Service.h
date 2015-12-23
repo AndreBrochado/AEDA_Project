@@ -1,7 +1,3 @@
-//
-// Created by Andre on 06/11/2015.
-//
-
 #ifndef AEDA_PROJECT_SERVICE_H
 #define AEDA_PROJECT_SERVICE_H
 
@@ -10,15 +6,16 @@
 
 using namespace std;
 
-struct Date {
+/*struct Date {
     int day;
     int month;
     int year;
     int hour;
     int minute;
-};
+};*/
 
 class Client;
+class Vehicle;
 
 /**
  * @class Service
@@ -28,12 +25,12 @@ class Service {
 protected:
     string description;
     float price;
-    Date startingDate;
+    tm startingDate;
     int duration;
     Client* client;
     Vehicle* vehicle;
 public:
-    Service(Date startingDate, Client* client, Vehicle* vehicle);
+    Service(tm startingDate);
 
     Service(istream &in);
 
@@ -53,7 +50,17 @@ public:
 
     virtual const string &getDescription() const = 0;
 
-    Date getStartingDate() const;
+    tm getStartingDate() const;
+
+    void setStartingDate(tm startingDate){this->startingDate = startingDate;};
+
+    Vehicle* getVehicle();
+
+    Client* getClient();
+
+    bool operator<(Service* s);
+
+    bool operator==(Service* s);
 };
 
 /**
@@ -62,7 +69,7 @@ public:
  */
 class StandardService : public Service {
 public:
-    StandardService(Date startingDate, Client* client, Vehicle* vehicle) : Service(startingDate, client, vehicle) { };
+    StandardService(tm startingDate) : Service(startingDate) { };
 
     StandardService(istream &in) : Service(in) { };
 
@@ -77,7 +84,7 @@ public:
  */
 class NonStandardService : public Service {
 public:
-    NonStandardService(Date startingDate, string description, float price, int duration, Client* client, Vehicle* vehicle);
+    NonStandardService(tm startingDate, string description, float price, int duration);
 
     NonStandardService(istream &in) : Service(in) { };
 
@@ -98,7 +105,7 @@ public:
  */
 class OilChange : public StandardService {
 public:
-    OilChange(Date startingDate, Client* client, Vehicle* vehicle);
+    OilChange(tm startingDate);
 
     OilChange(istream &in) : StandardService(in) { };
 
@@ -119,7 +126,7 @@ public:
  */
 class Inspection : public StandardService {
 public:
-    Inspection(Date startingDate, Client* client, Vehicle* vehicle);
+    Inspection(tm startingDate);
 
     Inspection(istream &in) : StandardService(in) { };
 
@@ -136,7 +143,7 @@ public:
 
 class CarWash : public StandardService {
 public:
-    CarWash(Date startingDate, Client* client, Vehicle* vehicle);
+    CarWash(tm startingDate);
 
     CarWash(istream &in) : StandardService(in) { };
 

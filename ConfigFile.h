@@ -1,7 +1,3 @@
-//
-// Created by up201403057 on 29-10-2015.
-//
-
 #ifndef AEDA_PROJECT_CONFIGFILE_H
 #define AEDA_PROJECT_CONFIGFILE_H
 
@@ -87,7 +83,7 @@ public:
      * @brief saves the file data
      */
     bool saveData(AutoRepairShop &repairShop, string &vehiclesFilename, string &clientsFilename,
-                  string &employeesFileName, bool overwrite = false);
+                  string &employeesFileName, string &servicesFilename, string &inactiveClientsFilename, bool overwrite = false);
 
     /**
      * @brief loads data from the file, creating an AutoRepairShop
@@ -126,18 +122,18 @@ public:
     /**
      * @brief creates and returns a client, adding all vehicles with license plates on the licensePlates vector
      */
-    Client createClientObject(istream &in, string name, AutoRepairShop &repairShop);
+    Client* createClientObject(istream &in, string name, AutoRepairShop &repairShop);
 
     /**
      * @brief saves the file data
      */
-    bool saveData(AutoRepairShop &repairShop, bool overwrite = false);
+    virtual bool saveData(AutoRepairShop &repairShop, bool overwrite = false);
 
     /**
      * @brief loads data from the file
      * @returns false if the file doesn't exist
      */
-    bool loadData(AutoRepairShop &repairShop);
+   virtual bool loadData(AutoRepairShop &repairShop);
 };
 
 /**
@@ -151,7 +147,7 @@ public:
     /**
      * @brief creates and returns an employee, adding all vehicles with license plates on the licensePlates vector
      */
-    Employee createEmployeeObject(istream &in, string name, AutoRepairShop &repairShop);
+    Employee* createEmployeeObject(istream &in, string name, AutoRepairShop &repairShop);
 
     /**
      * @brief saves the file data
@@ -176,7 +172,7 @@ public:
     /**
      * @brief creates and returns a service
      */
-    Service* createServiceObject(istream &in, AutoRepairShop &repairShop);
+    Service* createServiceObject(istream &in, AutoRepairShop &repairShop, int classIdentifier);
 
     /**
     * @brief saves the file data
@@ -189,6 +185,19 @@ public:
     */
     bool loadData(AutoRepairShop &repairShop);
 
+};
+
+/**
+ * @class InactiveClientsFile
+ * @brief contains the info of all the Auto Repair Shop's inactive clients
+ */
+class InactiveClientsFile : public ClientsFile {
+public:
+    InactiveClientsFile(string &filename) : ClientsFile(filename) {}
+
+    bool saveData(AutoRepairShop &repairShop, bool overwrite = false);
+
+    bool loadData(AutoRepairShop &repairShop);
 };
 
 

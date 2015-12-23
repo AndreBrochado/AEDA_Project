@@ -1,14 +1,10 @@
-//
-// Created by Andre on 17/10/2015.
-//
-
-
 #include <time.h>
 #include <stdlib.h>
 #include <algorithm>
 
 #include "AutoRepairShop.h"
 #include "ConfigFile.h"
+#include "Service.h"
 
 // ============================================ PERSON ============================================ //
 
@@ -31,6 +27,7 @@ Person::Person(istream &in, string name, vector<string> &licensePlates) {
         in >> testString;
     }
     this->id = atoi(testString.c_str());
+    in.ignore(1000, '\n');
 }
 
 void Person::saveObjectInfo(ostream &out) {
@@ -65,11 +62,78 @@ bool operator>(const Employee &e1, const Employee &e2) {
 
 // ============================================ CLIENT ============================================ //
 
+Client::Client(istream &in, string name, vector<string> &licensePlates) : Person(in, name, licensePlates) {
+    getline(in, address);
+    getline(in, email);
+    getline(in, phoneNumber);
+    this->clientCard = NULL;
+}
+
+void Client::saveObjectInfo(ostream &out) {
+    Person::saveObjectInfo(out);
+    out << endl << address << endl << email << endl << phoneNumber;
+    if (clientCard)
+        out << endl << getLastServiceDate().tm_mday << " " << getLastServiceDate().tm_mon << " " <<
+        getLastServiceDate().tm_year << endl << clientCard->getPoints();
+}
+
+void Client::createClientCard(tm date, float cost) {
+    this->clientCard = new PointCard(date, cost, this);
+}
+
+void Client::deleteClientCard() {
+    this->clientCard = NULL;
+}
+
+void Client::updatePoints(tm date, float cost) {
+    this->clientCard->addPoints(cost);
+    this->clientCard->updateDate(date);
+}
+
+void Client::removePoints(int numPoints) {
+    this->clientCard->removePoints(numPoints);
+}
+
+bool Client::checkPointsExpiration() {
+    return this->clientCard->checkPointsExpiration();
+}
+
+void Client::printServices() const {
+    for (size_t i = 0; i < vehicles.size(); i++) {
+        vehicles[i]->printServices();
+        if (i != vehicles.size() - 1)
+            cout << endl;
+    }
+}
+
+tm Client::getLastServiceDate() {
+    tm lastDate = getToday();
+    for (size_t i = 0; i < vehicles.size(); i++) {
+        for (size_t j = 0; j < vehicles[i]->getServices().size(); j++) {
+            if (lastDate > vehicles[i]->getServices()[j]->getStartingDate())
+                lastDate = vehicles[i]->getServices()[j]->getStartingDate();
+        }
+    }
+    return lastDate;
+}
+
+bool Client::isInactive() {
+    if (getNumberOfServices() == 0 || clientCard == NULL)
+        return true;
+    tm lastDate = getLastServiceDate();
+    time_t lastDateSecs = mktime(&lastDate);
+    tm today = getToday();
+    time_t todaySecs = mktime(&lastDate);
+    return ((todaySecs - lastDateSecs) >= SECS_PER_MIN * MINs_PER_HOUR * HOURS_PER_DAY * DAYS_PER_YEAR);
+}
+
 // ============================================ EMPLOYEE ============================================ //
 
 // ===================================== AUTOREPAIRSHOP ===================================== //
 
-AutoRepairShop::AutoRepairShop(string name) {
+int AutoRepairShop::nextClientID = 0;
+
+AutoRepairShop::AutoRepairShop(string name) : scheduledServices(NULL) {
     this->name = name;
 }
 
@@ -86,6 +150,12 @@ vector<Client *> AutoRepairShop::clientsWithName(string name) {
     for (size_t i = 0; i < clients.size(); i++) {
         if (clients[i]->getName() == name)
             clientsWithName.push_back(clients[i]);
+    }
+    unordered_set<Client *, clientHash, clientHash>::iterator it = inactiveClients.begin();
+    while (it != inactiveClients.end()) {
+        if ((*it)->getName() == name)
+            clientsWithName.push_back(*it);
+        it++;
     }
     return clientsWithName;
 }
@@ -108,10 +178,12 @@ bool AutoRepairShop::isEmployee(Employee *employee1) {
 }
 
 bool AutoRepairShop::addClient(Client *client) {
-    if (isClient(client))
-        return false;
-    clients.push_back(client);
-    clients[clients.size() - 1]->setID(clients.size() - 1);
+    client->setID(nextClientID);
+    nextClientID++;
+    if (client->getClientCard())
+        clients.push_back(client);
+    else
+        inactiveClients.insert(client);
     return true;
 }
 
@@ -137,6 +209,17 @@ bool AutoRepairShop::addVehicle(Vehicle *vehicle) {
     return true;
 }
 
+void AutoRepairShop::checkForInactiveClients() {
+    for (size_t i = 0; i < clients.size(); i++) {
+        if (clients[i]->isInactive()) {
+            clients.erase(clients.begin() + i);
+            removeClientCard(*clients[i]->getClientCard());
+            clients[i]->deleteClientCard();
+            inactiveClients.insert(clients[i]);
+        }
+    }
+}
+
 bool AutoRepairShop::removeVehicle(Vehicle *vehicle) {
     int index = sequentialSearch(vehicles, vehicle);
     if (index == -1) {
@@ -147,6 +230,11 @@ bool AutoRepairShop::removeVehicle(Vehicle *vehicle) {
     }
     for (size_t i = 0; i < clients.size(); i++) {
         clients[i]->removeVehicle(vehicle); //only removes from the one who actually has it
+    }
+    unordered_set<Client *, clientHash, clientHash>::iterator it = inactiveClients.begin();
+    while (it != inactiveClients.end()) {
+        (*it)->removeVehicle(vehicle);
+        it++;
     }
     vehicles.erase(vehicles.begin() + index);
     return true;
@@ -186,13 +274,27 @@ bool AutoRepairShop::removeEmployee(Employee *employee) {
 
 bool AutoRepairShop::removeClient(Client *client) {
     int index = sequentialSearch(clients, client);
-    if (index == -1)
-        return false;
-    for (size_t i = 0; i < clients[index]->getVehicles().size(); i++) {
-        removeVehicle(clients[index]->getVehicles()[i]);
+    for (size_t i = 0; i < client->getVehicles().size(); i++) {
+        removeVehicle(client->getVehicles()[i]);
     }
-    clients.erase(clients.begin() + index);
+    if (!client->isInactive()) {
+        removeClientCard(*client->getClientCard());
+        clients.erase(clients.begin() + index);
+    }
+    else
+        inactiveClients.erase(client);
+
     return true;
+}
+
+void AutoRepairShop::removeClientCard(PointCard clientCard) {
+    priority_queue<PointCard> temp;
+    while (!clientCards.empty()) {
+        if (clientCards.top().getClient() != clientCard.getClient())
+            temp.push(clientCards.top());
+        clientCards.pop();
+    }
+    clientCards = temp;
 }
 
 void Person::printObjectInfo() const {
@@ -201,6 +303,11 @@ void Person::printObjectInfo() const {
 
 void Client::printObjectInfo() const {
     Person::printObjectInfo();
+    if (clientCard)
+        cout << "Number of Points: " << clientCard->getPoints() << endl << "Expiring at: " <<
+        clientCard->getDate().tm_mday << "/" << clientCard->getDate().tm_mon + 1 << "/" <<
+        clientCard->getDate().tm_year + 1900 << endl;
+    cout << "Address: " << address << endl << "Email: " << email << endl << "Telephone: " << phoneNumber << endl;
     cout << "Owned vehicles: ";
     for (size_t i = 0; i < vehicles.size(); i++) {
         cout << endl << "Vehicle " << i << ":" << endl;
@@ -254,14 +361,6 @@ void AutoRepairShop::printClientsInfo() const {
     }
 }
 
-void Client::printServices() const {
-    for (size_t i = 0; i < vehicles.size(); i++) {
-        vehicles[i]->printServices();
-        if (i != vehicles.size() - 1)
-            cout << endl;
-    }
-}
-
 void AutoRepairShop::printServices() const {
     for (size_t i = 0; i < clients.size(); i++) {
         clients[i]->printServices();
@@ -307,6 +406,181 @@ void AutoRepairShop::printAllInfo() const {
         "Note: you need to have at least 1 client and 1 employee to add vehicles";
 }
 
-bool AutoRepairShop::addVehicleToClient(Vehicle *vehicle, int clientIndex) {
-    return clients[clientIndex]->addVehicle(vehicle);
+bool AutoRepairShop::addVehicleToClient(Vehicle *vehicle, Client *client) {
+    return client->addVehicle(vehicle);
+}
+
+Client *AutoRepairShop::clientWithID(int id) {
+    for (size_t i = 0; i < clients.size(); i++) {
+        if (id == clients[i]->getID())
+            return clients[i];
+    }
+    unordered_set<Client *, clientHash, clientHash>::iterator it = inactiveClients.begin();
+    while (it != inactiveClients.end()) {
+        if ((*it)->getID() == id)
+            return *it;
+    }
+    return NULL;
+}
+
+void AutoRepairShop::addScheduledService(Service *service) {
+    scheduledServices.insert(service);
+}
+
+Client *AutoRepairShop::clientWithVehicle(Vehicle *vehicle) {
+    for (size_t i = 0; i < clients.size(); i++) {
+        if (sequentialSearch(clients[i]->getVehicles(), vehicle) != -1)
+            return clients[i];
+    }
+    return NULL;
+}
+
+bool AutoRepairShop::addServiceToVehicle(Service *service, Vehicle *vehicle) {
+    Client *client = clientWithVehicle(vehicle);
+    if (!client)
+        client = inactiveClientWithVehicle(vehicle);
+    if (!client)
+        return false;
+    if (client->isInactive()) {
+        client->createClientCard(service->getStartingDate(), service->getPrice());
+        clients.push_back(client);
+        inactiveClients.erase(client);
+        clientCards.push(*client->getClientCard());
+    }
+    else {
+        removeClientCard(*client->getClientCard());
+        client->getClientCard()->addPoints(service->getPrice());
+        clientCards.push(*client->getClientCard());
+    }
+    service->addClient(client);
+    service->addVehicle(vehicle);
+    vehicle->addService(service);
+    return true;
+}
+
+Client *AutoRepairShop::inactiveClientWithVehicle(Vehicle *vehicle) {
+    unordered_set<Client *, clientHash, clientHash>::iterator it = inactiveClients.begin();
+    while (it != inactiveClients.end()) {
+        for (size_t i = 0; i < (*it)->getVehicles().size(); i++) {
+            if ((*it)->getVehicles()[i] == vehicle)
+                return (*it);
+        }
+        it++;
+    }
+    return NULL;
+}
+
+int Client::getNumberOfServices() {
+    int sum = 0;
+    for (size_t i = 0; i < vehicles.size(); i++) {
+        sum += vehicles[i]->getServices().size();
+    }
+    return sum;
+}
+
+bool AutoRepairShop::removeScheduledService(Service *service) {
+    if (!existsScheduledService(service))
+        return false;
+    scheduledServices.remove(service);
+    return true;
+}
+
+bool AutoRepairShop::existsScheduledService(Service *service) {
+    BSTItrIn<Service *> it(scheduledServices);
+    while (!it.isAtEnd()) {
+        if (it.retrieve() == service)
+            return true;
+        it.advance();
+    }
+    return false;
+}
+
+bool AutoRepairShop::removeService(Service *service, Vehicle *vehicle) {
+    Client *client = clientWithVehicle(vehicle);
+    service->addVehicle(vehicle);
+    service->addClient(client);
+    if (vehicle->removeService(service)) {
+        client->removePoints((int) service->getPrice() * PointCard::getCostToPoints());
+        return true;
+    }
+    else
+        return false;
+}
+
+void AutoRepairShop::printInactiveClientsInfo() {
+    if (inactiveClients.size() == 0)
+        cout << "There are no inactive clients!" << endl;
+    else {
+        unordered_set<Client *, clientHash, clientHash>::iterator it = inactiveClients.begin();
+        while (it != inactiveClients.end()) {
+            (*it)->printObjectInfo();
+            cout << endl;
+            it++;
+        }
+    }
+}
+
+Service *AutoRepairShop::findService(Service *service, Vehicle *vehicle) {
+    service->addClient(clientWithVehicle(vehicle));
+    service->addVehicle(vehicle);
+    for (size_t i = 0; i < vehicle->getServices().size(); i++) {
+        if (*service == vehicle->getServices()[i])
+            return vehicle->getServices()[i];
+    }
+    return NULL;
+}
+
+Service *AutoRepairShop::findScheduledService(Service *service, Vehicle *vehicle) {
+    service->addClient(clientWithVehicle(vehicle));
+    service->addVehicle(vehicle);
+    BSTItrIn<Service *> it(scheduledServices);
+    while (!it.isAtEnd()) {
+        if (*service == it.retrieve())
+            return it.retrieve();
+    }
+    return NULL;
+}
+
+void AutoRepairShop::printScheduledServicesInOrder() {
+    BSTItrIn<Service *> it(scheduledServices);
+
+    while (!it.isAtEnd()) {
+        it.retrieve()->printObjectInfo();
+        cout << endl;
+        it.advance();
+    }
+}
+
+void AutoRepairShop::printInactiveClientsWithName(string name) {
+    unordered_set<Client*, clientHash, clientHash>::iterator it = inactiveClients.begin();
+    int count = 0;
+    while(it != inactiveClients.end()){
+        if((*it)->getName() == name) {
+            count++;
+            (*it)->printObjectInfo();
+            cout << endl;
+        }
+        it++;
+    }
+    if(count == 0)
+        cout << "There are no inactive clients with that name!" << endl;
+}
+
+bool AutoRepairShop::isTopClient(Client *client) {
+    priority_queue<PointCard> temp = clientCards;
+    for(int i = 0; i < 3; i++){
+        if(temp.empty())
+            return false;
+        if(temp.top().getClient() == client)
+            return true;
+        else
+            temp.pop();
+    }
+    return false;
+}
+
+void AutoRepairShop::removeClientPoints(Client *client) {
+    removeClientCard(*client->getClientCard());
+    client->removePoints(0);
+    clientCards.push(*client->getClientCard());
 }

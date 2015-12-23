@@ -1,13 +1,5 @@
-//
-// Created by Andre on 06/11/2015.
-//
-
+#include <time.h>
 #include "Utilities.h"
-
-ostream &operator<<(ostream &out, Date &d1) {
-    out << d1.day << "/" << d1.month << "/" << d1.year << endl << d1.hour << "h" << d1.minute << d1.minute;
-    return out;
-}
 
 bool readString(const string &prompt, string &returnString) {
     string testString;
@@ -26,7 +18,7 @@ bool readString(const string &prompt, string &returnString) {
     return true;
 }
 
-long int dateToDayNumber(Date date) {
+/*long int dateToDayNumber(Date date) {
     date.month = (date.month + 9) % 12;
     date.year = date.year - date.month / 10;
     return 365 * date.year + date.year / 4 - date.year / 100 + date.year / 400 + (date.month * 306 + 5) / 10 +
@@ -46,7 +38,7 @@ Date dayNumberToDate(long int g) {
     returnDate.year = returnDate.year + (mi + 2) / 12;
     returnDate.day = ddd - (mi * 306 + 5) / 10 + 1;
     return returnDate;
-}
+}*/
 
 bool validDay(int year, int month, int day) {
     switch (month) {
@@ -75,6 +67,21 @@ bool validDay(int year, int month, int day) {
     }
 }
 
-Date operator+(Date d, int i) {
-    return dayNumberToDate(dateToDayNumber(d) + i);
+bool validHour(int hour, int minute) {
+    return hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59;
+}
+
+bool operator>(tm d1, tm d2){
+    return mktime(&d1) > mktime(&d2);
+
+}
+
+bool operator==(tm d1, tm d2){
+    return mktime(&d1) == mktime(&d2);
+}
+
+tm getToday() {
+    time_t now = time(NULL);
+    tm *today = localtime(&now);
+    return *today;
 }
